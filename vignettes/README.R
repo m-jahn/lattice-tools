@@ -1,0 +1,244 @@
+## ---- eval = FALSE------------------------------------------------------------
+#  require(devtools)
+#  devtools::install_github("https://github.com/m-jahn/lattice-tools")
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(latticetools)
+library(lattice)
+data(mtcars)
+
+# mean and stdev error bars are drawn for
+# common x values
+xyplot(mpg ~ factor(cyl), mtcars, lwd = 2, 
+  panel = function(x, y, ...) {
+    panel.barplot(x, y, ...)
+  }
+)
+
+# using the same variable for x and grouping will
+# result in typical lattice behavior
+xyplot(mpg ~ factor(cyl), mtcars, 
+  groups = cyl, lwd = 2,
+  panel = function(x, y, ...) {
+    panel.barplot(x, y, ...)
+  }
+)
+
+# we can also use different variables for the x var, grouping,
+# and paneling. As a visual control that error bars are drawn
+# for the correct groups we overlay the single data points.
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  groups = gear, lwd = 2, auto.key = list(columns = 3),
+  panel = function(x, y, ...) {
+    panel.barplot(x, y, beside = TRUE, ...)
+    panel.stripplot(x, y, jitter.data = TRUE,
+      horizontal = FALSE, amount = 0.15, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+# simple example
+df <- data.frame(
+  Y = sample(1:10, 60, replace = TRUE), 
+  X = factor(rep(1:3, each = 20))
+)
+
+xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
+
+# but with continuous Y variable, it doesn't work as expected
+df$Y <- rnorm(60)
+xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
+
+# for this purpose we can bin the Y variable into groups
+xyplot(Y ~ X, df, groups = X, 
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, col = grey(0.6), ...)
+    panel.beeswarm(x, y, bin_y = TRUE, breaks_y = 10, ...)
+})
+
+## ---- fig.height = 4, fig.width = 6-------------------------------------------
+library(grid)
+library(lattice)
+library(directlabels)
+
+data("mtcars")
+mtcars$car <- rownames(mtcars)
+
+# A standard example using lattice grouping and paneling;
+# We can also draw boxes around labels and change label size
+xyplot(mpg ~ wt | factor(cyl), mtcars,
+  groups = cyl, pch = 19, labels = mtcars$car,
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+  }
+)
+
+# A similar plot but without grouping. This requires explicit
+# use of subscripts
+xyplot(mpg ~ wt | factor(cyl), mtcars,
+  pch = 19, labels = mtcars$car,
+  as.table = TRUE, layout = c(3, 1),
+  panel = function(x, y, subscripts, ...) {
+    panel.xyplot(x, y, ...)
+    panel.directlabel(x, y, subscripts = subscripts, 
+      draw_box = TRUE, box_fill = "white", ...)
+  }
+)
+
+# An example without panels and more groups
+xyplot(mpg ~ wt, mtcars,
+  groups = hp, pch = 19, 
+  labels = mtcars$wt, cex = 0.6,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+# mean and stdev error bars are drawn for
+# common x values
+xyplot(mpg ~ factor(cyl), mtcars, 
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+  }
+)
+
+# using the same variable for x and grouping will
+# result in typical lattice behavior
+xyplot(mpg ~ factor(cyl), mtcars,
+  groups = cyl, lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+  }
+)
+
+# we can also use different variables for the x var, grouping,
+# and paneling. As a visual control that error bars are drawn 
+# for the correct groups we overlay the single data points. 
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  groups = gear, lwd = 2, pch = 19, cex = 1.5,
+  auto.key = list(columns = 3),
+  panel = function(x, y, ...) {
+    panel.stripplot(x, y, jitter.data = TRUE, 
+      horizontal = FALSE, amount = 0.15, alpha = 0.3, ...)
+    panel.errbars(x, y, beside = TRUE, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+# Two examples for a custom lattice key
+# inside a panel. The first with taking all arguments from the 
+# top-level plotting function, the second with custom arguments.
+xyplot(mpg ~ 1/wt | factor(vs), mtcars,
+  groups = carb, pch = 19, cex = 1,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.key(...)
+    panel.key(labels = letters[1:5], which.panel = 2, 
+      corner = c(0.9, 0.1), col = 1:5, pch = 3, cex = 1)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(grid)
+library(lattice)
+
+data("USMortality")
+
+# A simple example using lattice paneling
+xyplot( ~ Rate | Sex, USMortality,
+  main = "US mortality rates by sex",
+  scales = list(draw = FALSE),
+  panel = function(x, ...) {
+    panel.piechart(x, ...)
+  }
+)
+
+# A more advanced example using grouping and
+# adjusting graphical parameters. The main variable 
+# 'x' is now summed up for each value of 'groups'
+xyplot( ~ Rate | Sex, USMortality,
+  groups = gsub(" ", "\n", Cause), 
+  col = heat.colors(10),
+  border = grey(0.3), cex = 0.7,
+  main = "US mortality rates by sex",
+  scales = list(draw = FALSE),
+  panel = function(x, ...) {
+    panel.piechart(x, diameter_sector = 0.1, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+# p-values are calculated between groups of x, grouping variable is ignored
+xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
+  panel = function(x, y, ...) {
+    panel.stripplot(x, y, jitter.data = TRUE, 
+      horizontal = FALSE, amount = 0.15, ...)
+    panel.pvalue(x, y, std = 1, symbol = TRUE, pvalue = TRUE)
+})
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+# Default behavior for quadrants is to split x and y data
+# at the respective median, and plot percentage of points 
+# per quandrant
+xyplot(mpg ~ 1/wt | factor(vs), mtcars,
+  groups = carb, pch = 19, cex = 1,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.quadrants(x, y, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+# colors are more subtle than default lattice theme
+xyplot(mpg ~ factor(cyl) | gear, mtcars,
+  groups = cyl, auto.key = list(columns = 3),
+  par.settings = custom.ggplot()
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+# colors are more subtle than default lattice theme
+xyplot(mpg ~ factor(cyl) | gear, mtcars,
+  groups = cyl, auto.key = list(columns = 3),
+  par.settings = custom.lattice()
+)
+
+## ---- fig.width = 6, fig.height = 6-------------------------------------------
+library(lattice)
+data(mtcars)
+
+# Draw a scatterplot matrix of all variables of a 
+# data frame against each other.
+custom_splom(mtcars[1:5])
+
+# We can customize the scatterplot
+custom_splom(
+  mtcars[1:5],
+  col_palette = rainbow(4),
+  scales = 10, 
+  xlab = "data points", ylab = "regression",
+  pch = 1, col = 1, cex = 0.6
+)
+
