@@ -1,7 +1,18 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-04-23
+2020-04-24
+
+<!-- badges start -->
+
+[![Build
+Status](https://travis-ci.com/m-jahn/lattice-tools.svg?branch=master)](https://travis-ci.com/m-jahn/lattice-tools)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/m-jahn)
+![GitHub
+issues](https://img.shields.io/github/issues/m-jahn/lattice-tools)
+![GitHub last
+commit](https://img.shields.io/github/last-commit/m-jahn/lattice-tools)
+<!-- badges end -->
 
 -----
 
@@ -32,11 +43,15 @@ devtools::install_github("https://github.com/m-jahn/lattice-tools")
 ## Panel functions
 
 These functions extend or simplify the `panel.function` landscape for
-`lattice`
+`lattice`.
 
 ### panel.barplot
 
-Draw barplot with error bars in lattice plots. Supports also grouping.
+Draw barplot with error bars in lattice plots. This custom panel
+function for lattice plots allows to draw barplots with error bars for
+arbitrary groups of data points. Error bars will be drawn for groups of
+identical x values with optional subsetting by grouping or paneling
+variables.
 
 ``` r
 library(latticetools)
@@ -85,8 +100,10 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 
 ### panel.beeswarm
 
-Panel function for beeswarm plots. This function builds heavily on the
-`beeswarm` package.
+Panel function for beeswarm plots. This panel function works essentially
+like a stripplot, but instead of randomly scattering a variable produces
+a regular, grid-like pattern of points. Currently only the X variable is
+transformed. However, X and Y variables can be discretized optionally.
 
 ``` r
 # simple example
@@ -121,8 +138,14 @@ xyplot(Y ~ X, df, groups = X,
 
 ### panel.directlabel
 
-Point labels for scatterplots. This function depends on the directlabels
-package, but instead of labeling only groups, it labels single points.
+Point labels for scatterplots. Draw text labels for all points of a
+scatterplot using functions from directlabels. In contrast to the
+functionality of the original `directlabels` package, *every point* is
+labelled instead of groups. Labels are also independent from the
+grouping variable, so that e.g. colors indicate a grouping variable and
+labels another. By default, labels adapt the graphical parameters of the
+higher level plot, including coloring according to groups. However, many
+parameters can be customized.
 
 ``` r
 library(grid)
@@ -178,8 +201,12 @@ xyplot(mpg ~ wt, mtcars,
 
 ### panel.errbars
 
-Draw error bars in lattice plots. This functions is very similar to
-`panel.barplot` only with points instead of bars.
+Draw error bars in lattice plots. This custom panel function for lattice
+plots allows to draw symbols with error bars for arbitrary groups of
+data points. Error bars will be drawn for groups of identical x values
+with optional subsetting by grouping or paneling variables. This
+functions is very similar to `panel.barplot` only with points instead of
+bars.
 
 ``` r
 library(lattice)
@@ -229,9 +256,9 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 
 ### panel.key
 
-Draw custom keys in lattice plots. Allows to draw a key (legend) inside
-a lattice panel, with more customization options than the lattice
-default.
+Draw custom keys in lattice plots. This custom panel function for
+lattice plots allows to draw a key (legend) inside a lattice panel, with
+more customization options than the lattice default.
 
 ``` r
 library(lattice)
@@ -378,7 +405,10 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 
 ### custom\_splom
 
-Custom scatterplot matrix (SPLOM)
+Custom scatterplot matrix (SPLOM). Custom wrapper function around
+lattice ‘splom’ with different upper and lower panel. A scatterplot
+matrix is a tiled plot where all variables of a data frame are plotted
+against each other.
 
 ``` r
 library(lattice)
