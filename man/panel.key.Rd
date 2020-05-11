@@ -11,6 +11,7 @@ panel.key(
   pch = 1,
   cex = 0.8,
   point.cex = NULL,
+  alpha = 1,
   points = TRUE,
   lines = FALSE,
   rectangles = FALSE,
@@ -34,7 +35,7 @@ panel.key(
 
 \item{rectangles}{(logical) if rectangles should be drawn}
 
-\item{col, lwd, lty, pch, cex, point.cex}{graphical parameters to draw key labels
+\item{col, lwd, lty, pch, cex, alpha, point.cex}{graphical parameters to draw key labels
 and symbols}
 
 \item{corner}{(numeric) vector of length 2 indicating the position of the key,

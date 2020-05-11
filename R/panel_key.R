@@ -12,7 +12,7 @@
 #' @param rectangles (logical) if rectangles should be drawn
 #' @param corner (numeric) vector of length 2 indicating the position of the key,
 #'   in Normalised Parent Coordinates (0 to 1)
-#' @param col,lwd,lty,pch,cex,point.cex graphical parameters to draw key labels
+#' @param col,lwd,lty,pch,cex,alpha,point.cex graphical parameters to draw key labels
 #'   and symbols
 #' @param ... other arguments passed to the function
 #' 
@@ -38,7 +38,7 @@
 panel.key <- function (
   groups = NULL, labels = NULL,
   which.panel = 1, pch = 1, cex = 0.8,
-  point.cex = NULL, 
+  point.cex = NULL, alpha = 1,
   points = TRUE, lines = FALSE, rectangles = FALSE,
   col = NULL,
   lwd = trellis.par.get()$superpose.line$lwd[1],
@@ -71,13 +71,15 @@ panel.key <- function (
   
   if (panel.number() %in% which.panel) {
     
-    key <- simpleKey(labels, points = points, lines = lines, rectangles = rectangles,...)
+    key <- simpleKey(labels, points = points, lines = lines, rectangles = rectangles, ...)
+    key$text$alpha <- alpha
     key$text$col <- col
     key$text$cex <- cex
     
     if (points == TRUE) {
       key$points$col <- col
       key$points$pch <- pch
+      key$points$alpha <- alpha
       key$points$cex <- ifelse(!is.null(point.cex), point.cex, cex)
     }
     
@@ -85,6 +87,7 @@ panel.key <- function (
       key$lines$col <- col
       key$lines$lwd <- lwd
       key$lines$lty <- lty
+      key$lines$alpha <- alpha
     }
     
     key.gf <- draw.key(key, draw = FALSE)
