@@ -314,6 +314,20 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
+### custom.colorblind
+
+Colorblind-safe grey lattice theme. The function takes no arguments. Colorblind-safe color scale with 7 colors was adapted from R color brewer, see `RColorBrewer::brewer.pal(8, "Dark2"))`. Color blind safe colors are distinguishable for most common types of color blindness (deuterotopia, deuteroanomaly), yet still look good for non color blind people.
+
+```{r, fig.height = 3, fig.width = 5}
+library(lattice)
+data(mtcars)
+
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+ groups = carb, auto.key = list(columns = 3),
+ par.settings = custom.colorblind()
+)
+```
+
 ### custom_splom
 
 Custom scatterplot matrix (SPLOM). Custom wrapper function around lattice 'splom' with different upper and lower panel. A scatterplot matrix is a tiled plot where all variables of a data frame are plotted against each other.

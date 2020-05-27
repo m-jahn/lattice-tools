@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-04-24
+2020-05-27
 
 <!-- badges start -->
 
@@ -67,7 +67,7 @@ xyplot(mpg ~ factor(cyl), mtcars, lwd = 2,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -80,7 +80,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -96,7 +96,7 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
 
 ### panel.beeswarm
 
@@ -115,7 +115,7 @@ df <- data.frame(
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 # but with continuous Y variable, it doesn't work as expected
@@ -123,7 +123,7 @@ df$Y <- rnorm(60)
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
 ``` r
 # for this purpose we can bin the Y variable into groups
@@ -134,7 +134,7 @@ xyplot(Y ~ X, df, groups = X,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
 
 ### panel.directlabel
 
@@ -167,7 +167,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 # A similar plot but without grouping. This requires explicit
@@ -183,7 +183,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
 ``` r
 # An example without panels and more groups
@@ -197,7 +197,7 @@ xyplot(mpg ~ wt, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
 ### panel.errbars
 
@@ -222,7 +222,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -235,7 +235,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -252,7 +252,7 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
 ### panel.key
 
@@ -278,7 +278,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ### panel.piechart
 
@@ -305,7 +305,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 # A more advanced example using grouping and
@@ -323,7 +323,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
 
 ### panel.pvalue
 
@@ -342,7 +342,7 @@ xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ### panel.quadrants
 
@@ -367,7 +367,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ### custom.ggplot
 
@@ -384,7 +384,7 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -401,7 +401,28 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+### custom.colorblind
+
+Colorblind-safe grey lattice theme. The function takes no arguments.
+Colorblind-safe color scale with 7 colors was adapted from R color
+brewer, see `RColorBrewer::brewer.pal(8, "Dark2"))`. Color blind safe
+colors are distinguishable for most common types of color blindness
+(deuterotopia, deuteroanomaly), yet still look good for non color blind
+people.
+
+``` r
+library(lattice)
+data(mtcars)
+
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+ groups = carb, auto.key = list(columns = 3),
+ par.settings = custom.colorblind()
+)
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -419,7 +440,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -432,4 +453,4 @@ custom_splom(
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->

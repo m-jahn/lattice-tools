@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-04-24
+2020-05-27
 
 <!-- badges start -->
 
@@ -403,6 +403,27 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 
 ![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
+### custom.colorblind
+
+Colorblind-safe grey lattice theme. The function takes no arguments.
+Colorblind-safe color scale with 7 colors was adapted from R color
+brewer, see `RColorBrewer::brewer.pal(8, "Dark2"))`. Color blind safe
+colors are distinguishable for most common types of color blindness
+(deuterotopia, deuteroanomaly), yet still look good for non color blind
+people.
+
+``` r
+library(lattice)
+data(mtcars)
+
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+ groups = carb, auto.key = list(columns = 3),
+ par.settings = custom.colorblind()
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
 ### custom\_splom
 
 Custom scatterplot matrix (SPLOM). Custom wrapper function around
@@ -419,7 +440,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -432,4 +453,4 @@ custom_splom(
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->

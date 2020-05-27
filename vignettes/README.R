@@ -225,6 +225,15 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
   par.settings = custom.lattice()
 )
 
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+ groups = carb, auto.key = list(columns = 3),
+ par.settings = custom.colorblind()
+)
+
 ## ---- fig.width = 6, fig.height = 6-------------------------------------------
 library(lattice)
 data(mtcars)
