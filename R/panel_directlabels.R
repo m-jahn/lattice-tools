@@ -28,6 +28,8 @@
 #'   x for which labels should be drawn (default: NULL) 
 #' @param y_boundary (numeric) vector of length two, indicating the boundaries of
 #'   y for which labels should be drawn (default: NULL)
+#' @param selected (logical) vector of the same length as input data, indicating
+#'   which labels should be drawn and which not (default: NULL)
 #' @param col (character) color (vector) to be used for labels and lines. 
 #'   The default, NULL, uses colors supplied by the top level function.
 #' @param cex (numeric) size of text labels and corresponding boxes
@@ -87,7 +89,8 @@
 panel.directlabel <- function(
   x, y, groups = NULL, subscripts = NULL,
   labels = NULL, col = NULL, cex = 0.8,
-  x_boundary = NULL, y_boundary = NULL, 
+  x_boundary = NULL, y_boundary = NULL,
+  selected = NULL,
   method = directlabels::smart.grid,
   draw_text = TRUE, draw_line = TRUE,
   draw_box = FALSE, box_fill = grey(0.95),
@@ -100,6 +103,13 @@ panel.directlabel <- function(
   valid <- !is.na(x) & !is.na(y)
   
   # remove values by user selection
+  if (!is.null(selected)) {
+    if (!is.null(subscripts)) {
+      valid <- valid & selected[subscripts]
+    } else {
+      valid <- valid & selected
+    }
+  }
   if (!is.null(x_boundary)) {
     if (length(x_boundary) == 2) {
       valid <- valid & x >= x_boundary[1] & x <= x_boundary[2]

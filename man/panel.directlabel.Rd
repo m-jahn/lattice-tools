@@ -14,6 +14,7 @@ panel.directlabel(
   cex = 0.8,
   x_boundary = NULL,
   y_boundary = NULL,
+  selected = NULL,
   method = directlabels::smart.grid,
   draw_text = TRUE,
   draw_line = TRUE,
@@ -43,6 +44,9 @@ x for which labels should be drawn (default: NULL)}
 
 \item{y_boundary}{(numeric) vector of length two, indicating the boundaries of
 y for which labels should be drawn (default: NULL)}
+
+\item{selected}{(logical) vector of the same length as input data, indicating
+which labels should be drawn and which not (default: NULL)}
 
 \item{method}{(list) the positioning method, default is \code{directlabels::smart.grid}}
 
