@@ -9,6 +9,7 @@ panel.errbars(
   y,
   groups = NULL,
   subscripts = NULL,
+  error_margin = NULL,
   col = NULL,
   ewidth = 0.08,
   beside = FALSE,
@@ -19,12 +20,16 @@ panel.errbars(
 }
 \arguments{
 \item{x, y}{(numeric, character) variables to be plotted. The x variable 
-is treated as a grouping varibale, i.e. error bars are calculated between groups
+is treated as a grouping variable, i.e. error bars are calculated between groups
 of unique x values.}
 
 \item{groups}{grouping variable passed down from xyplot (does not need to be specified)}
 
 \item{subscripts}{subscripts passed down from xyplot (does not need to be specified)}
+
+\item{error_margin}{optional vector of error margins if errors are not to be computed, 
+but supplied directly. Needs to be of length(y), default is NULL. If supplied,
+FUN_mean and FUN_errb are ignored.}
 
 \item{col}{(character) color (vector) to be used for points and lines. 
 The default, NULL, uses colors supplied by the top level function.}
@@ -77,6 +82,26 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
     panel.stripplot(x, y, jitter.data = TRUE, 
       horizontal = FALSE, amount = 0.15, alpha = 0.3, ...)
     panel.errbars(x, y, beside = TRUE, ...)
+  }
+)
+
+# alternatively, means and error margins can be supplied directly. 
+# In this case means are supplied as unique combinations
+# of y and x while error_margin is a separate vector with same length as y.
+mtcars_means <- data.frame(
+  cyl = sort(unique(mtcars$cyl)),
+  mpg = with(mtcars, tapply(mpg, cyl, mean)),
+  stdev = with(mtcars, tapply(mpg, cyl, sd))
+)
+
+# you might have to adjust the yscale as it is determined from the
+# range of the y variable only, ignoring the extension through error bars.
+xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = mtcars_means$stdev,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
   }
 )
 
