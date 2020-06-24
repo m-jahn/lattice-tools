@@ -2,6 +2,10 @@
 #  require(devtools)
 #  devtools::install_github("https://github.com/m-jahn/lattice-tools")
 
+## ---- echo = FALSE------------------------------------------------------------
+# set seed to obtain same pattern for randomly sampled values in strip-plots etc.
+set.seed(123)
+
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
 library(latticetools)
 library(lattice)
@@ -33,6 +37,26 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
     panel.barplot(x, y, beside = TRUE, ...)
     panel.stripplot(x, y, jitter.data = TRUE,
       horizontal = FALSE, amount = 0.15, ...)
+  }
+)
+
+# alternatively, means and error margins can be supplied directly. 
+# In this case means are supplied as unique combinations
+# of y and x while error_margin is a separate vector with same length as y.
+mtcars_means <- data.frame(
+  cyl = sort(unique(mtcars$cyl)),
+  mpg = with(mtcars, tapply(mpg, cyl, mean)),
+  stdev = with(mtcars, tapply(mpg, cyl, sd))
+)
+
+# you might have to adjust the yscale as it is determined from the
+# range of the y variable only, ignoring the extension through error bars.
+xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = mtcars_means$stdev,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.barplot(x, y, ...)
   }
 )
 
@@ -129,6 +153,26 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
     panel.stripplot(x, y, jitter.data = TRUE, 
       horizontal = FALSE, amount = 0.15, alpha = 0.3, ...)
     panel.errbars(x, y, beside = TRUE, ...)
+  }
+)
+
+# alternatively, means and error margins can be supplied directly. 
+# In this case means are supplied as unique combinations
+# of y and x while error_margin is a separate vector with same length as y.
+mtcars_means <- data.frame(
+  cyl = sort(unique(mtcars$cyl)),
+  mpg = with(mtcars, tapply(mpg, cyl, mean)),
+  stdev = with(mtcars, tapply(mpg, cyl, sd))
+)
+
+# you might have to adjust the yscale as it is determined from the
+# range of the y variable only, ignoring the extension through error bars.
+xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = mtcars_means$stdev,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
   }
 )
 
