@@ -12,6 +12,9 @@
 #'   of unique x values.
 #' @param groups grouping variable passed down from xyplot (does not need to be specified)
 #' @param subscripts subscripts passed down from xyplot (does not need to be specified)
+#' @param error_margin optional vector of error margins if errors are not to be computed, 
+#'   but supplied directly. Needs to be of length(y), default is NULL. If supplied,
+#'   FUN_mean and FUN_errb are ignored.
 #' @param col (character) color (vector) to be used for points and lines. 
 #'   The default, NULL, uses colors supplied by the top level function.
 #' @param ewidth (numeric) width of the error bars and whiskers
@@ -54,10 +57,32 @@
 #'       horizontal = FALSE, amount = 0.15, ...)
 #'   }
 #' )
+#' 
+#' # alternatively, means and error margins can be supplied directly. 
+#' # In this case means are supplied as unique combinations
+#' # of y and x while error_margin is a separate vector with same length as y.
+#' mtcars_means <- data.frame(
+#'   cyl = sort(unique(mtcars$cyl)),
+#'   mpg = with(mtcars, tapply(mpg, cyl, mean)),
+#'   stdev = with(mtcars, tapply(mpg, cyl, sd))
+#' )
+#' 
+#' # you might have to adjust the yscale as it is determined from the
+#' # range of the y variable only, ignoring the extension through error bars.
+#' xyplot(mpg ~ factor(cyl), mtcars_means,
+#'   error_margin = mtcars_means$stdev,
+#'   ylim = c(9, 36), groups = cyl,
+#'   lwd = 2, pch = 19, cex = 1.5,
+#'   panel = function(x, y, ...) {
+#'     panel.barplot(x, y, ...)
+#'   }
+#' )
+#' 
 #' @export
 # ------------------------------------------------------------------------------
 panel.barplot <- function (x, y,
   groups = NULL, subscripts = NULL,
+  error_margin = NULL,
   col = NULL, ewidth = 0.08, 
   beside = FALSE, origin = NULL,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
@@ -110,10 +135,19 @@ panel.barplot <- function (x, y,
     x_sub <- x[subg %in% val]
     y_sub <- y[subg %in% val]
     
-    means <- tapply(y_sub, x_sub, FUN_mean)
-    stdev <- tapply(y_sub, x_sub, FUN_errb)
-    x_sub <- unique(x_sub)
+    if (is.null(error_margin)) {
+      # aggregate values per group
+      means <- tapply(y_sub, x_sub, FUN_mean)
+      stdev <- tapply(y_sub, x_sub, FUN_errb)
+    } else {
+      # if error margins are supplied directly, use tapply
+      # simply to emulate same behavior as standard
+      error_margin <- error_margin[subscripts]
+      means <- tapply(y_sub, x_sub, mean)
+      stdev <- tapply(error_margin[subg %in% val], x_sub, mean)
+    }
     
+    x_sub <- unique(x_sub)
     if (is.factor(x_sub)) x_sub <- sort(as.numeric(x_sub))
     if (beside) x_pos <- x_sub + nudge[val] else x_pos <- x_sub
     if (is.null(origin)) ybottom <- current.panel.limits()$ylim[1]
