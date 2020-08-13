@@ -178,7 +178,8 @@ panel.directlabel <- function(
     method, d = data.frame(
       x = x_cm, y = y_cm, 
       x_orig = x_cm, y_orig = y_cm,
-      groups = labels, 
+      groups = labels,
+      label = labels,
       cex = rep(cex, length(x)), 
       index = 1:length(x)
     )
