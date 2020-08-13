@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-05-27
+2020-08-13
 
 <!-- badges start -->
 
@@ -47,7 +47,7 @@ These functions extend or simplify the `panel.function` landscape for
 
 ### panel.barplot
 
-Draw barplot with error bars in lattice plots. This custom panel
+Draw a barplot with error bars in lattice plots. This custom panel
 function for lattice plots allows to draw barplots with error bars for
 arbitrary groups of data points. Error bars will be drawn for groups of
 identical x values with optional subsetting by grouping or paneling
@@ -67,7 +67,7 @@ xyplot(mpg ~ factor(cyl), mtcars, lwd = 2,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -80,7 +80,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -96,7 +96,31 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+
+``` r
+# alternatively, means and error margins can be supplied directly. 
+# In this case means are supplied as unique combinations
+# of y and x while error_margin is a separate vector with same length as y.
+mtcars_means <- data.frame(
+  cyl = sort(unique(mtcars$cyl)),
+  mpg = with(mtcars, tapply(mpg, cyl, mean)),
+  stdev = with(mtcars, tapply(mpg, cyl, sd))
+)
+
+# you might have to adjust the yscale as it is determined from the
+# range of the y variable only, ignoring the extension through error bars.
+xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = mtcars_means$stdev,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.barplot(x, y, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
 
 ### panel.beeswarm
 
@@ -115,7 +139,7 @@ df <- data.frame(
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 # but with continuous Y variable, it doesn't work as expected
@@ -123,7 +147,7 @@ df$Y <- rnorm(60)
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
 ``` r
 # for this purpose we can bin the Y variable into groups
@@ -134,17 +158,17 @@ xyplot(Y ~ X, df, groups = X,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
 ### panel.directlabel
 
 Point labels for scatterplots. Draw text labels for all points of a
 scatterplot using functions from directlabels. In contrast to the
 functionality of the original `directlabels` package, *every point* is
-labelled instead of groups. Labels are also independent from the
-grouping variable, so that e.g. colors indicate a grouping variable and
-labels another. By default, labels adapt the graphical parameters of the
-higher level plot, including coloring according to groups. However, many
+labeled instead of groups. Labels are also independent from the grouping
+variable, so that e.g. colors indicate a grouping variable and labels
+another. By default, labels adapt the graphical parameters of the higher
+level plot, including coloring according to groups. However, many
 parameters can be customized.
 
 ``` r
@@ -167,7 +191,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 # A similar plot but without grouping. This requires explicit
@@ -183,7 +207,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 ``` r
 # An example without panels and more groups
@@ -197,7 +221,7 @@ xyplot(mpg ~ wt, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
 ### panel.errbars
 
@@ -205,7 +229,7 @@ Draw error bars in lattice plots. This custom panel function for lattice
 plots allows to draw symbols with error bars for arbitrary groups of
 data points. Error bars will be drawn for groups of identical x values
 with optional subsetting by grouping or paneling variables. This
-functions is very similar to `panel.barplot` only with points instead of
+function is very similar to `panel.barplot` only with points instead of
 bars.
 
 ``` r
@@ -222,7 +246,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -235,7 +259,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -252,7 +276,31 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+
+``` r
+# alternatively, means and error margins can be supplied directly. 
+# In this case means are supplied as unique combinations
+# of y and x while error_margin is a separate vector with same length as y.
+mtcars_means <- data.frame(
+  cyl = sort(unique(mtcars$cyl)),
+  mpg = with(mtcars, tapply(mpg, cyl, mean)),
+  stdev = with(mtcars, tapply(mpg, cyl, sd))
+)
+
+# you might have to adjust the yscale as it is determined from the
+# range of the y variable only, ignoring the extension through error bars.
+xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = mtcars_means$stdev,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
 
 ### panel.key
 
@@ -278,7 +326,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ### panel.piechart
 
@@ -305,7 +353,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 # A more advanced example using grouping and
@@ -323,7 +371,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
 
 ### panel.pvalue
 
@@ -342,7 +390,7 @@ xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ### panel.quadrants
 
@@ -367,7 +415,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ### custom.ggplot
 
@@ -384,7 +432,7 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -401,7 +449,7 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -422,7 +470,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -440,7 +488,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -453,4 +501,4 @@ custom_splom(
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->

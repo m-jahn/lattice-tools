@@ -2,7 +2,7 @@
 % Please edit documentation in R/panel_key.R
 \name{panel.key}
 \alias{panel.key}
-\title{Draw custom keys in lattice plots}
+\title{Draw custom keys inside lattice plots}
 \usage{
 panel.key(
   groups = NULL,
@@ -54,7 +54,7 @@ data(mtcars)
 
 # Two examples for a custom lattice key
 # inside a panel. The first with taking all arguments from the 
-# top-level plotting function, the second with custom arguments.
+# top-level plotting function, the second with custom but nonsensical arguments.
 xyplot(mpg ~ 1/wt | factor(vs), mtcars,
   groups = carb, pch = 19, cex = 1,
   panel = function(x, y, ...) {

@@ -1,4 +1,4 @@
-#' Draw custom keys in lattice plots
+#' Draw custom keys inside lattice plots
 #' 
 #' This custom panel function for lattice plots allows to draw
 #' a key (legend) inside a lattice panel, with more customization
@@ -22,7 +22,7 @@
 #' 
 #' # Two examples for a custom lattice key
 #' # inside a panel. The first with taking all arguments from the 
-#' # top-level plotting function, the second with custom arguments.
+#' # top-level plotting function, the second with custom but nonsensical arguments.
 #' xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 #'   groups = carb, pch = 19, cex = 1,
 #'   panel = function(x, y, ...) {
@@ -62,7 +62,7 @@ panel.key <- function (
       col <- rep(cols, length.out = length(levels(groups)))
     
     } else {
-      stop("Either 'groups' or 'labels' muste be supplied")
+      stop("Either 'groups' or 'labels' must be supplied")
     }
   } else {
     # use labels if no groups is supplied

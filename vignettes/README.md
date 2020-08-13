@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-06-24
+2020-08-13
 
 <!-- badges start -->
 
@@ -47,7 +47,7 @@ These functions extend or simplify the `panel.function` landscape for
 
 ### panel.barplot
 
-Draw barplot with error bars in lattice plots. This custom panel
+Draw a barplot with error bars in lattice plots. This custom panel
 function for lattice plots allows to draw barplots with error bars for
 arbitrary groups of data points. Error bars will be drawn for groups of
 identical x values with optional subsetting by grouping or paneling
@@ -165,10 +165,10 @@ xyplot(Y ~ X, df, groups = X,
 Point labels for scatterplots. Draw text labels for all points of a
 scatterplot using functions from directlabels. In contrast to the
 functionality of the original `directlabels` package, *every point* is
-labelled instead of groups. Labels are also independent from the
-grouping variable, so that e.g. colors indicate a grouping variable and
-labels another. By default, labels adapt the graphical parameters of the
-higher level plot, including coloring according to groups. However, many
+labeled instead of groups. Labels are also independent from the grouping
+variable, so that e.g. colors indicate a grouping variable and labels
+another. By default, labels adapt the graphical parameters of the higher
+level plot, including coloring according to groups. However, many
 parameters can be customized.
 
 ``` r
