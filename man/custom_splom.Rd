@@ -24,24 +24,7 @@ custom_splom(
 \arguments{
 \item{df}{(data.frame) data frame whose columns are plotted against each other}
 
-\item{...}{other arguments passed to the function
-
-#' @examples
-library(lattice)
-data(mtcars)
-
-# Draw a scatterplot matrix of all variables of a 
-# data frame against each other.
-custom_splom(mtcars[1:5])
-
-# We can customize the scatterplot
-custom_splom(
-  mtcars[1:5],
-  col_palette = rainbow(4),
-  scales = 10, 
-  xlab = "data points", ylab = "regression",
-  pch = 1, col = 1, cex = 0.6
-)}
+\item{...}{other arguments passed to the function}
 
 \item{aspect}{(numeric) aspect ratio between height and width, default = 1.}
 
@@ -71,4 +54,22 @@ number of ticks and tick labels to draw at axes}
 \description{
 Custom wrapper function around lattice `splom` with different upper and lower panel.
 A scatterplot matrix is a tiled plot where all variables of a data frame are plotted against each other.
+}
+\examples{
+library(lattice)
+data(mtcars)
+
+# Draw a scatterplot matrix of all variables of a 
+# data frame against each other.
+custom_splom(mtcars[1:5])
+
+# We can customize the scatterplot
+custom_splom(
+  mtcars[1:5],
+  col_palette = rainbow(4),
+  scales = 10, 
+  xlab = "data points", ylab = "regression",
+  pch = 1, col = 1, cex = 0.6
+)
+
 }

@@ -23,7 +23,7 @@
 #' @param cex (numeric) character size of the symbol
 #' @param ... other arguments passed to the function
 #' 
-#' #' @examples
+#' @examples
 #' library(lattice)
 #' data(mtcars)
 #' 
