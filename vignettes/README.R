@@ -7,6 +7,18 @@
 set.seed(123)
 
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+
+xyplot(1:3 ~ 4:6, col = grey(0.7),
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.arrowbox(x0 = c(4, 5), y0 = c(2.5, 1),
+      x1 = c(5, 6), y1 = c(3, 1.5),
+      direction = c(1, -1), ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
 library(latticetools)
 library(lattice)
 data(mtcars)
@@ -173,6 +185,31 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
   lwd = 2, pch = 19, cex = 1.5,
   panel = function(x, y, ...) {
     panel.errbars(x, y, ...)
+  }
+)
+
+## ---- fig.height = 2.5, fig.width = 5-----------------------------------------
+library(lattice)
+
+# table with dummdy genetic loci
+genes <- data.frame(
+  gene_name = c("abc", "def", "ghi", "jkl"),
+  gene_strand = c("+", "+", "+", "-"),
+  gene_start = c(123, 178, 245, 310),
+  gene_end = c(167, 233, 297, 354)
+)
+ 
+# plot genes on a linear map
+xyplot(gene_end ~ gene_start, genes,
+  groups = gene_strand,
+  scales = list(y = list(draw = FALSE)),
+  xlim = c(80, 380), ylim = c(-3,2),
+  xlab = "", ylab = "",
+  gene_strand = genes[["gene_strand"]],
+  gene_name = genes[["gene_name"]],
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.9))
+    panel.geneplot(x, y, arrows = TRUE, ...)
   }
 )
 

@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-08-13
+2020-08-30
 
 <!-- badges start -->
 
@@ -45,6 +45,28 @@ devtools::install_github("https://github.com/m-jahn/lattice-tools")
 These functions extend or simplify the `panel.function` landscape for
 `lattice`.
 
+### panel.arrowbox
+
+Custom lattice panel function to draw boxes with arrow head from 2 XY
+coordinates and direction argument. Each argument can be a vector of
+same length so that multiple arrows can be drawn at once. Useful for
+`panel.geneplot` function.
+
+``` r
+library(lattice)
+
+xyplot(1:3 ~ 4:6, col = grey(0.7),
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.arrowbox(x0 = c(4, 5), y0 = c(2.5, 1),
+      x1 = c(5, 6), y1 = c(3, 1.5),
+      direction = c(1, -1), ...)
+  }
+)
+```
+
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
 ### panel.barplot
 
 Draw a barplot with error bars in lattice plots. This custom panel
@@ -67,7 +89,7 @@ xyplot(mpg ~ factor(cyl), mtcars, lwd = 2,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -80,7 +102,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -96,7 +118,7 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-3.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
 ``` r
 # alternatively, means and error margins can be supplied directly. 
@@ -120,7 +142,7 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-4.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->
 
 ### panel.beeswarm
 
@@ -139,7 +161,7 @@ df <- data.frame(
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 # but with continuous Y variable, it doesn't work as expected
@@ -147,7 +169,7 @@ df$Y <- rnorm(60)
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 ``` r
 # for this purpose we can bin the Y variable into groups
@@ -158,7 +180,7 @@ xyplot(Y ~ X, df, groups = X,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
 ### panel.directlabel
 
@@ -191,7 +213,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 # A similar plot but without grouping. This requires explicit
@@ -207,7 +229,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 ``` r
 # An example without panels and more groups
@@ -221,7 +243,7 @@ xyplot(mpg ~ wt, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
 
 ### panel.errbars
 
@@ -246,7 +268,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -259,7 +281,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -276,7 +298,7 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
 
 ``` r
 # alternatively, means and error margins can be supplied directly. 
@@ -300,7 +322,43 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
+
+### panel.geneplot
+
+Plot genes along a linear axis. Custom lattice panel function to draw
+genes with start and end coordinates as main input. Optional vectors for
+gene\_name or gene\_strand must have same length as x,y. Panel function
+supports paneling and grouping (e.g. by gene functional category) just
+as regular panel functions.
+
+``` r
+library(lattice)
+
+# table with dummdy genetic loci
+genes <- data.frame(
+  gene_name = c("abc", "def", "ghi", "jkl"),
+  gene_strand = c("+", "+", "+", "-"),
+  gene_start = c(123, 178, 245, 310),
+  gene_end = c(167, 233, 297, 354)
+)
+ 
+# plot genes on a linear map
+xyplot(gene_end ~ gene_start, genes,
+  groups = gene_strand,
+  scales = list(y = list(draw = FALSE)),
+  xlim = c(80, 380), ylim = c(-3,2),
+  xlab = "", ylab = "",
+  gene_strand = genes[["gene_strand"]],
+  gene_name = genes[["gene_name"]],
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.9))
+    panel.geneplot(x, y, arrows = TRUE, ...)
+  }
+)
+```
+
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ### panel.key
 
@@ -326,7 +384,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ### panel.piechart
 
@@ -353,7 +411,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 # A more advanced example using grouping and
@@ -371,7 +429,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
 
 ### panel.pvalue
 
@@ -390,7 +448,7 @@ xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ### panel.quadrants
 
@@ -415,7 +473,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ### custom.ggplot
 
@@ -432,7 +490,7 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -449,7 +507,7 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -470,7 +528,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -488,7 +546,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -501,4 +559,4 @@ custom_splom(
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](/vignettes/README_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
