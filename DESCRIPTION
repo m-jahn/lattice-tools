@@ -10,9 +10,8 @@ Authors@R:
 Description: This package contains panel functions and wrapper functions for the R lattice package, a general purpose plotting package from Deepayan Sarkar. Lattice's functionality is comparable to the popular ggplot2 package but has a slightly different look and feel.
 License: GPL-3 + file LICENSE
 Imports: 
-    colorspace, grid, lattice, latticeExtra, nlstools, 
-    cluster, dendextend, dplyr, gtools, directlabels,
-    plyr, tidyr, grDevices, methods, stats
+    colorspace, grid, lattice, latticeExtra, 
+    directlabels, grDevices, methods, stats
 Suggests: knitr, rmarkdown
 Encoding: UTF-8
 LazyData: true
