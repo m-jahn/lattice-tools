@@ -17,6 +17,8 @@ panel.geneplot(
   height = 1,
   tip = NULL,
   col = NULL,
+  col_labels = grey(0.3),
+  rot_labels = 35,
   group.number = NULL,
   ...
 )
@@ -44,6 +46,10 @@ panel.geneplot(
 
 \item{col}{(character) color (vector) to be used for boxes/arrows.
 The default, NULL, uses colors supplied by the top level function.}
+
+\item{col_labels}{(character) color used for text labels and lines}
+
+\item{rot_labels}{(numeric) degree of rotation for text labels (0 for no rotation at all)}
 
 \item{group.number}{internal parameter only used when function is called as panel.groups
 argument from within panel.superpose. Does not need to be specified manually.}

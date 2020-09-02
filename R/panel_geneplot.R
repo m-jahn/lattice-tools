@@ -17,6 +17,8 @@
 #' @param tip (numeric) pointedness of the arrow head (in native X units. Defaults to a 30th of x scale)
 #' @param col (character) color (vector) to be used for boxes/arrows.
 #'   The default, NULL, uses colors supplied by the top level function.
+#' @param col_labels (character) color used for text labels and lines
+#' @param rot_labels (numeric) degree of rotation for text labels (0 for no rotation at all)
 #' @param group.number internal parameter only used when function is called as panel.groups
 #'   argument from within panel.superpose. Does not need to be specified manually.
 #' @param ... other arguments passed to the function
@@ -53,6 +55,8 @@ panel.geneplot <- function (x, y,
   draw_labels = TRUE, arrows = TRUE,
   origin = 0, height = 1,
   tip = NULL, col = NULL,
+  col_labels = grey(0.3),
+  rot_labels = 35,
   group.number = NULL, ...) {
   
   # if groups are specified first call panel.superpose for each group,
@@ -63,7 +67,8 @@ panel.geneplot <- function (x, y,
       panel.groups = panel.geneplot,
       gene_name = gene_name, gene_strand = gene_strand,
       draw_labels = draw_labels, arrows = arrows,
-      origin = origin, height = height, tip = tip, ...)
+      origin = origin, height = height, tip = tip, 
+      col_labels = col_labels, rot_labels = rot_labels, ...)
   } else {
     
     # if paneling is used, subset arguments by subscripts
@@ -110,18 +115,18 @@ panel.geneplot <- function (x, y,
     # draw text labels
     if (draw_labels) {
       # text labels
-      panel.text(x+(y-x)/2, -1.5, gene_name, col = grey(0.3), 
-        srt = 35, cex = 0.7, adj = c(1.0, 1.0), pos = NULL)
+      panel.text(x+(y-x)/2, -1.5, gene_name, col = col_labels, 
+        srt = rot_labels, adj = c(1.0, 1.0), pos = NULL, ...)
       
       # label lines
       panel.segments(
         x0 = x+(y-x)/2, y0 = ifelse(strand == -1, -1, 0), 
         x1 = x+(y-x)/2, y1 = -1.4, 
-        col = grey(0.3), lwd = 0.8)
+        col = col_labels, lwd = 0.8)
     }
     
     # draw a 'bottom' line
-    panel.abline(h = origin, lwd = 1.5, col = grey(0.3))
+    panel.abline(h = origin, lwd = 1.5, col = col_labels)
   }
 }
 
