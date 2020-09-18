@@ -56,8 +56,11 @@ custom.lattice <- function() {
   theme$add.line$col <- default_cols[1]
   theme$add.text$cex <- 0.8
   theme$par.main.text$cex <- 1
-  theme$box.umbrella$lty <- 1
   theme$par.main.text$font <- 1
+  theme$box.umbrella$lty <- 1
+  theme$par.xlab.text$cex = 0.8
+  theme$par.ylab.text$cex = 0.8
+  theme$par.zlab.text$cex = 0.8
   theme
 }
 
@@ -94,7 +97,10 @@ custom.colorblind <- function() {
   theme$add.line$col <- default_cols[1]
   theme$add.text$cex <- 0.8
   theme$par.main.text$cex <- 1
-  theme$box.umbrella$lty <- 1
   theme$par.main.text$font <- 1
+  theme$box.umbrella$lty <- 1
+  theme$par.xlab.text$cex = 0.8
+  theme$par.ylab.text$cex = 0.8
+  theme$par.zlab.text$cex = 0.8
   theme
 }
