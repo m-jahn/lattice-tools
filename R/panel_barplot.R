@@ -83,7 +83,7 @@
 panel.barplot <- function (x, y,
   groups = NULL, subscripts = NULL,
   error_margin = NULL,
-  col = NULL, ewidth = 0.08, 
+  col = NULL, ewidth = NULL, 
   beside = FALSE, origin = NULL,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
   FUN_errb = function(x) sd(x, na.rm = TRUE), ...)
@@ -105,6 +105,10 @@ panel.barplot <- function (x, y,
       col <- lattice::trellis.par.get()$plot.symbol$col
   }
   
+  # determine width of bars if nothing is provided
+  if (is.null(ewidth)) {
+    ewidth <- 0.5/(1+length(levels(groups)))
+  }
   
   panel.rect <- function(
     xleft, ybottom, xright, ytop, 

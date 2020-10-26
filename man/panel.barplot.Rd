@@ -11,7 +11,7 @@ panel.barplot(
   subscripts = NULL,
   error_margin = NULL,
   col = NULL,
-  ewidth = 0.08,
+  ewidth = NULL,
   beside = FALSE,
   origin = NULL,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
