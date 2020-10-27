@@ -255,7 +255,7 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 
 ### panel.geneplot
 
-Plot genes along a linear axis. Custom lattice panel function to draw genes with start and end coordinates as main input. Optional vectors for gene_name or gene_strand must have same length as x,y. Panel function supports paneling and grouping (e.g. by gene functional category) just as regular panel functions.
+Plot genes along a linear axis. Custom lattice panel function to draw genes with start and end coordinates as main input. Optional vectors for `gene_name` or `gene_strand` must have same length as `x`, `y`. Panel function supports paneling and grouping (e.g. by gene functional category) just as regular panel functions.
 
 ```{r, fig.height = 2.5, fig.width = 5}
 library(lattice)
@@ -279,6 +279,21 @@ xyplot(gene_end ~ gene_start, genes,
   panel = function(x, y, ...) {
     panel.grid(h = -1, v = -1, col = grey(0.9))
     panel.geneplot(x, y, arrows = TRUE, ...)
+  }
+)
+
+# same example with customized arrows
+xyplot(gene_end ~ gene_start, genes,
+  groups = gene_strand,
+  scales = list(y = list(draw = FALSE)),
+  xlim = c(80, 380), ylim = c(-3,2),
+  xlab = "", ylab = "",
+  gene_strand = genes[["gene_strand"]],
+  gene_name = genes[["gene_name"]],
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.9))
+    panel.geneplot(x, y, arrows = TRUE, offset = 0.5,
+      height = 0.6, rot_labels = 0, tip = 3, col_labels = 1, ...)
   }
 )
 ```

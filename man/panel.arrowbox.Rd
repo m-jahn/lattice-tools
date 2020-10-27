@@ -7,13 +7,13 @@
 panel.arrowbox(x0, x1, y0, y1, direction = NULL, tip = NULL, ...)
 }
 \arguments{
-\item{x0, x1, y0, y1}{(numeric) Coordinates of the two points determining the 
+\item{x0, x1, y0, y1}{(numeric) coordinates of the two points determining the 
 rectangle (bottom left, top right).}
 
-\item{direction}{(numeric) Direction in which arrow should point, 
+\item{direction}{(numeric) direction in which arrow should point, 
 1 for right, -1 for left side}
 
-\item{tip}{pointedness of the arrow head (in native X units. Defaults to a 30th of x scale)}
+\item{tip}{(numeric) pointedness of the arrow head (in native X units. Defaults to a 30th of x scale)}
 
 \item{...}{other arguments passed to the function}
 }

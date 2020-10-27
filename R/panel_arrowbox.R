@@ -4,11 +4,11 @@
 #' coordinates and direction argument. Each argument can be a vector of same legnth
 #' so that multiple arrows can be dran at once.
 #'
-#' @param x0,x1,y0,y1 (numeric) Coordinates of the two points determining the 
+#' @param x0,x1,y0,y1 (numeric) coordinates of the two points determining the 
 #'   rectangle (bottom left, top right).
-#' @param direction (numeric) Direction in which arrow should point, 
+#' @param direction (numeric) direction in which arrow should point, 
 #'   1 for right, -1 for left side
-#' @param tip pointedness of the arrow head (in native X units. Defaults to a 30th of x scale)
+#' @param tip (numeric) pointedness of the arrow head (in native X units. Defaults to a 30th of x scale)
 #' @param ... other arguments passed to the function
 #' @export
 #' 

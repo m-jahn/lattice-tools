@@ -213,6 +213,21 @@ xyplot(gene_end ~ gene_start, genes,
   }
 )
 
+# same example with customized arrows
+xyplot(gene_end ~ gene_start, genes,
+  groups = gene_strand,
+  scales = list(y = list(draw = FALSE)),
+  xlim = c(80, 380), ylim = c(-3,2),
+  xlab = "", ylab = "",
+  gene_strand = genes[["gene_strand"]],
+  gene_name = genes[["gene_name"]],
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.9))
+    panel.geneplot(x, y, arrows = TRUE, offset = 0.5,
+      height = 0.6, rot_labels = 0, tip = 3, col_labels = 1, ...)
+  }
+)
+
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
 library(lattice)
 data(mtcars)

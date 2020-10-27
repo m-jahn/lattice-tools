@@ -15,10 +15,12 @@ panel.geneplot(
   arrows = TRUE,
   origin = 0,
   height = 1,
+  offset = 0,
   tip = NULL,
   col = NULL,
   col_labels = grey(0.3),
   rot_labels = 35,
+  dist_labels = 1.5,
   group.number = NULL,
   ...
 )
@@ -42,6 +44,8 @@ panel.geneplot(
 
 \item{height}{(numeric) height of the boxes/arrows}
 
+\item{offset}{(numeric) distance of boxes/arrows from origin (default: 0)}
+
 \item{tip}{(numeric) pointedness of the arrow head (in native X units. Defaults to a 30th of x scale)}
 
 \item{col}{(character) color (vector) to be used for boxes/arrows.
@@ -50,6 +54,8 @@ The default, NULL, uses colors supplied by the top level function.}
 \item{col_labels}{(character) color used for text labels and lines}
 
 \item{rot_labels}{(numeric) degree of rotation for text labels (0 for no rotation at all)}
+
+\item{dist_labels}{(numeric) relative distance of labels to origin, defaults to 1.5 times box height}
 
 \item{group.number}{internal parameter only used when function is called as panel.groups
 argument from within panel.superpose. Does not need to be specified manually.}
@@ -84,6 +90,21 @@ xyplot(gene_end ~ gene_start, genes,
   panel = function(x, y, ...) {
     panel.grid(h = -1, v = -1, col = grey(0.9))
     panel.geneplot(x, y, arrows = TRUE, ...)
+  }
+)
+
+# same example with customized arrows
+xyplot(gene_end ~ gene_start, genes,
+  groups = gene_strand,
+  scales = list(y = list(draw = FALSE)),
+  xlim = c(80, 380), ylim = c(-3,2),
+  xlab = "", ylab = "",
+  gene_strand = genes[["gene_strand"]],
+  gene_name = genes[["gene_name"]],
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.9))
+    panel.geneplot(x, y, arrows = TRUE, offset = 0.5, 
+      height = 0.6, rot_labels = 0, tip = 3, col_labels = 1, ...)
   }
 )
 
