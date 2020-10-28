@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-10-27
+2020-10-28
 
 <!-- badges start -->
 
@@ -493,6 +493,27 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 ```
 
 ![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+\#\#\# panel.symbols
+
+Plot a grouping variable encoded by symbols. Custom lattice panel
+function to plot one more grouping variable encoded by symbols (‘pch’),
+instead of just the default encoded by color. Inspired by
+`panel.bubbleplot` from package `tactile`.
+
+``` r
+library(lattice)
+data(mtcars)
+
+# first grouping variable for colors, second for symbols (z)
+xyplot(mpg ~ factor(cyl), mtcars,
+  groups = gear, z = mtcars$cyl,
+  panel = function(x, y, z, ...) {
+    panel.symbols(x, y, z, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ### custom.ggplot
 
@@ -509,7 +530,7 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -526,7 +547,7 @@ xyplot(mpg ~ factor(cyl) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -547,7 +568,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -565,7 +586,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -578,4 +599,4 @@ custom_splom(
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->

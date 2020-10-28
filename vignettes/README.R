@@ -305,6 +305,18 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 library(lattice)
 data(mtcars)
 
+# first grouping variable for colors, second for symbols (z)
+xyplot(mpg ~ factor(cyl), mtcars,
+  groups = gear, z = mtcars$cyl,
+  panel = function(x, y, z, ...) {
+    panel.symbols(x, y, z, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
 # colors are more subtle than default lattice theme
 xyplot(mpg ~ factor(cyl) | gear, mtcars,
   groups = cyl, auto.key = list(columns = 3),

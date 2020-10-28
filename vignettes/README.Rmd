@@ -391,6 +391,22 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
   }
 )
 ```
+### panel.symbols
+
+Plot a grouping variable encoded by symbols. Custom lattice panel function to plot one more grouping variable encoded by symbols ('pch'), instead of just the default encoded by color. Inspired by `panel.bubbleplot` from package `tactile`.
+
+```{r, fig.height = 3, fig.width = 5}
+library(lattice)
+data(mtcars)
+
+# first grouping variable for colors, second for symbols (z)
+xyplot(mpg ~ factor(cyl), mtcars,
+  groups = gear, z = mtcars$cyl,
+  panel = function(x, y, z, ...) {
+    panel.symbols(x, y, z, ...)
+  }
+)
+```
 
 ### custom.ggplot
 
