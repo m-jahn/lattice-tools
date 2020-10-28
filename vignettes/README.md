@@ -493,7 +493,8 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 ```
 
 ![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
-\#\#\# panel.symbols
+
+### panel.symbols
 
 Plot a grouping variable encoded by symbols. Custom lattice panel
 function to plot one more grouping variable encoded by symbols (‘pch’),
