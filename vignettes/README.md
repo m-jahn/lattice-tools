@@ -1,10 +1,12 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-10-28
+2020-11-20
 
 <!-- badges start -->
 
+[![R build
+status](https://github.com/m-jahn/lattice-tools/workflows/R-CMD-check/badge.svg)](https://github.com/m-jahn/lattice-tools/actions)
 [![Build
 Status](https://travis-ci.com/m-jahn/lattice-tools.svg?branch=master)](https://travis-ci.com/m-jahn/lattice-tools)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/m-jahn)
