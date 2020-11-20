@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "michael.jahn@scilifelab.se",
            comment = c(ORCID = "0000-0002-3913-153X"))
-Description: This package contains panel functions and wrapper functions for the R lattice package, a general purpose plotting package from Deepayan Sarkar. Lattice's functionality is comparable to the popular ggplot2 package but has a slightly different look and feel.
+Description: Panel functions and wrappers that extend the R lattice universe. Lattice is a general purpose plotting package from Deepayan Sarkar. Lattice's functionality is comparable to the popular ggplot2 package but has a slightly different look and feel.
 License: GPL-3 + file LICENSE
 Imports: 
     colorspace, grid, lattice, latticeExtra, 

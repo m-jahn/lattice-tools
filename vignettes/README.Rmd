@@ -12,10 +12,10 @@ vignette: >
 
 <!-- badges start -->
 [![R build status](https://github.com/m-jahn/lattice-tools/workflows/R-CMD-check/badge.svg)](https://github.com/m-jahn/lattice-tools/actions)
-[![Build Status](https://travis-ci.com/m-jahn/lattice-tools.svg?branch=master)](https://travis-ci.com/m-jahn/lattice-tools)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/m-jahn)
 ![GitHub issues](https://img.shields.io/github/issues/m-jahn/lattice-tools)
 ![GitHub last commit](https://img.shields.io/github/last-commit/m-jahn/lattice-tools)
+![Platform](https://img.shields.io/badge/platform-all-green)
 <!-- badges end -->
 
 ***
