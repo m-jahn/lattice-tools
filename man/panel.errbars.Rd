@@ -13,6 +13,7 @@ panel.errbars(
   col = NULL,
   ewidth = 0.08,
   beside = FALSE,
+  draw_points = FALSE,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
   FUN_errb = function(x) sd(x, na.rm = TRUE),
   ...
@@ -37,6 +38,8 @@ The default, NULL, uses colors supplied by the top level function.}
 \item{ewidth}{width of the error bar whiskers}
 
 \item{beside}{(logical) draw bars/points next to each other (default: FALSE)}
+
+\item{draw_points}{(logical) overlay original points over error barplot (default: FALSE)}
 
 \item{FUN_mean}{the function used to calculate group (x-variable) means}
 
@@ -76,12 +79,10 @@ xyplot(mpg ~ factor(cyl), mtcars,
 # and paneling. As a visual control that error bars are drawn 
 # for the correct groups we overlay the single data points. 
 xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
-  groups = gear, lwd = 2, pch = 19, cex = 1.5,
+  groups = gear, lwd = 2, cex = 1.5,
   auto.key = list(columns = 3),
   panel = function(x, y, ...) {
-    panel.stripplot(x, y, jitter.data = TRUE, 
-      horizontal = FALSE, amount = 0.15, alpha = 0.3, ...)
-    panel.errbars(x, y, beside = TRUE, ...)
+    panel.errbars(x, y, beside = TRUE, draw_points = TRUE, ...)
   }
 )
 

@@ -19,6 +19,7 @@
 #'   The default, NULL, uses colors supplied by the top level function.
 #' @param ewidth (numeric) width of the error bars and whiskers
 #' @param beside (logical) draw bars/points next to each other (default: FALSE)
+#' @param draw_points (logical) overlay original points over barplot (default: FALSE)
 #' @param origin (numeric) Y coordinate where bars should originate (default NULL means bottom axis)
 #' @param FUN_mean the function used to calculate group (x-variable) means
 #' @param FUN_errb the function used to calculate group (x-variable) errors
@@ -52,9 +53,7 @@
 #' xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 #'   groups = gear, lwd = 2, auto.key = list(columns = 3),
 #'   panel = function(x, y, ...) {
-#'     panel.barplot(x, y, beside = TRUE, ...)
-#'     panel.stripplot(x, y, jitter.data = TRUE,
-#'       horizontal = FALSE, amount = 0.15, ...)
+#'     panel.barplot(x, y, beside = TRUE, draw_points = TRUE, ...)
 #'   }
 #' )
 #' 
@@ -84,7 +83,8 @@ panel.barplot <- function (x, y,
   groups = NULL, subscripts = NULL,
   error_margin = NULL,
   col = NULL, ewidth = NULL, 
-  beside = FALSE, origin = NULL,
+  beside = FALSE, draw_points = FALSE,
+  origin = NULL,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
   FUN_errb = function(x) sd(x, na.rm = TRUE), ...)
 {
@@ -151,16 +151,16 @@ panel.barplot <- function (x, y,
       stdev <- tapply(error_margin[subg %in% val], x_sub, mean)
     }
     
-    x_sub <- unique(x_sub)
-    if (is.factor(x_sub)) x_sub <- sort(as.numeric(x_sub))
-    if (beside) x_pos <- x_sub + nudge[val] else x_pos <- x_sub
+    x_s <- unique(x_sub)
+    if (is.factor(x_s)) x_s <- sort(as.numeric(x_s))
+    if (beside) x_pos <- x_s + nudge[val] else x_pos <- x_s
     if (is.null(origin)) ybottom <- current.panel.limits()$ylim[1]
     else ybottom <- origin
     
     Y <- as.matrix(cbind(means, means-stdev, means+stdev))
-    y_sub <- Y[x_sub, 1]
-    y0 <- Y[x_sub, 2]
-    y1 <- Y[x_sub, 3]
+    y_s <- Y[x_s, 1]
+    y0 <- Y[x_s, 2]
+    y1 <- Y[x_s, 3]
     offs <- ewidth/2
     
     # plot line segments and bars
@@ -171,6 +171,12 @@ panel.barplot <- function (x, y,
     panel.segments(x0 = x_pos - offs, x1 = x_pos + offs, y0 = y1, y1 = y1, 
       col = col[val], ...)
     panel.rect(xleft = x_pos - ewidth, ybottom = ybottom, xright = x_pos + ewidth, 
-      ytop = y_sub, col = col[val], ...)
+      ytop = y_s, col = col[val], ...)
+    
+    # optionally plot original xy values
+    if (draw_points) {
+      if (beside) x_sub <- as.numeric(x_sub) + nudge[val]
+      panel.xyplot(x_sub, y_sub, col = col[val], ...)
+    }
   }
 }

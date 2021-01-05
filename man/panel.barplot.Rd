@@ -13,6 +13,7 @@ panel.barplot(
   col = NULL,
   ewidth = NULL,
   beside = FALSE,
+  draw_points = FALSE,
   origin = NULL,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
   FUN_errb = function(x) sd(x, na.rm = TRUE),
@@ -38,6 +39,8 @@ The default, NULL, uses colors supplied by the top level function.}
 \item{ewidth}{(numeric) width of the error bars and whiskers}
 
 \item{beside}{(logical) draw bars/points next to each other (default: FALSE)}
+
+\item{draw_points}{(logical) overlay original points over barplot (default: FALSE)}
 
 \item{origin}{(numeric) Y coordinate where bars should originate (default NULL means bottom axis)}
 
@@ -81,9 +84,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
   groups = gear, lwd = 2, auto.key = list(columns = 3),
   panel = function(x, y, ...) {
-    panel.barplot(x, y, beside = TRUE, ...)
-    panel.stripplot(x, y, jitter.data = TRUE,
-      horizontal = FALSE, amount = 0.15, ...)
+    panel.barplot(x, y, beside = TRUE, draw_points = TRUE, ...)
   }
 )
 

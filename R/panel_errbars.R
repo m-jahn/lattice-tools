@@ -19,6 +19,7 @@
 #'   The default, NULL, uses colors supplied by the top level function.
 #' @param ewidth width of the error bar whiskers
 #' @param beside (logical) draw bars/points next to each other (default: FALSE)
+#' @param draw_points (logical) overlay original points over error barplot (default: FALSE)
 #' @param FUN_mean the function used to calculate group (x-variable) means
 #' @param FUN_errb the function used to calculate group (x-variable) errors
 #' @param ... other arguments passed to the function
@@ -49,12 +50,10 @@
 #' # and paneling. As a visual control that error bars are drawn 
 #' # for the correct groups we overlay the single data points. 
 #' xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
-#'   groups = gear, lwd = 2, pch = 19, cex = 1.5,
+#'   groups = gear, lwd = 2, cex = 1.5,
 #'   auto.key = list(columns = 3),
 #'   panel = function(x, y, ...) {
-#'     panel.stripplot(x, y, jitter.data = TRUE, 
-#'       horizontal = FALSE, amount = 0.15, alpha = 0.3, ...)
-#'     panel.errbars(x, y, beside = TRUE, ...)
+#'     panel.errbars(x, y, beside = TRUE, draw_points = TRUE, ...)
 #'   }
 #' )
 #' 
@@ -83,7 +82,8 @@
 panel.errbars <- function (x, y,
   groups = NULL, subscripts = NULL,
   error_margin = NULL,
-  col = NULL, ewidth = 0.08, beside = FALSE,
+  col = NULL, ewidth = 0.08,
+  beside = FALSE, draw_points = FALSE,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
   FUN_errb = function(x) sd(x, na.rm = TRUE), ...)
 { 
@@ -127,14 +127,14 @@ panel.errbars <- function (x, y,
       stdev <- tapply(error_margin[subg %in% val], x_sub, mean)
     }
     
-    x_sub <- unique(x_sub)
-    if (is.factor(x_sub)) x_sub <- sort(as.numeric(x_sub))
-    if (beside) x_pos <- x_sub + nudge[val] else x_pos <- x_sub
+    x_s <- unique(x_sub)
+    if (is.factor(x_s)) x_s <- sort(as.numeric(x_s))
+    if (beside) x_pos <- x_s + nudge[val] else x_pos <- x_s
     
     Y <- as.matrix(cbind(means, means-stdev, means+stdev))
-    y_sub <- Y[x_sub, 1]
-    y0 <- Y[x_sub, 2]
-    y1 <- Y[x_sub, 3]
+    y_s <- Y[x_s, 1]
+    y0 <- Y[x_s, 2]
+    y1 <- Y[x_s, 3]
     offs <- ewidth/2
     
     # plot line segments and points
@@ -144,7 +144,12 @@ panel.errbars <- function (x, y,
       col = col[val], ...)
     panel.segments(x0 = x_pos - offs, x1 = x_pos + offs, y0 = y1, y1 = y1, 
       col = col[val], ...)
-    panel.xyplot(x_pos, y_sub, col.symbol = col[val], col.line = col[val], ...)
-  }
+    panel.xyplot(x_pos, y_s, col.symbol = col[val], col.line = col[val], ...)
   
+    # optionally plot original xy values
+    if (draw_points) {
+      if (beside) x_sub <- as.numeric(x_sub) + nudge[val]
+      panel.xyplot(x_sub, y_sub, col = col[val], ...)
+    }
+  }
 }
