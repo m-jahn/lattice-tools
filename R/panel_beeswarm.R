@@ -8,16 +8,20 @@
 #' @author modified after a function from Walmes Zeviani, \email{walmes@ufpr.br},
 #'   \code{panel.beeswarm} from package \code{wzRfun}. Idea based on the package
 #'   \code{beeswarm}.
+#' 
 #' @param x,y (numeric, factor) X and Y variables passed to \code{panel.xyplot()}
 #' @param groups Passed to \code{panel.xyplot()}.
 #' @param subscripts Passed to \code{panel.xyplot()}.
 #' @param bin_x (Logical) If X variable is to be binned or not (default FALSE).
 #' @param bin_y  (Logical) If Y variable is to be binned or not (default FALSE).
-#' @param breaks_x (numeric) Number of breaks for x variable if \code{bin_x = TRUE}
-#' @param breaks_y (numeric) Number of breaks for y variable if \code{bin_y = TRUE}
-#' @param spread (numeric) Scalar indicating how much to spread the values. 
+#' @param breaks_x (numeric) Number of breaks for x variable if \code{bin_x = TRUE}.
+#'   Alternatively a numeric vector supplying the breaks for bins.
+#' @param breaks_y (numeric) Number of breaks for y variable if \code{bin_y = TRUE}.
+#'   Alternatively a numeric vector supplying the breaks for bins.
+#' @param spread (numeric) Scalar indicating how much values should be spread. 
 #' @param ... Further arguments passed to \code{xyplot}
-#' @importFrom lattice xyplot    
+#' 
+#' @importFrom lattice xyplot
 #' @examples
 #' 
 #' library(lattice)
@@ -41,6 +45,15 @@
 #'     panel.beeswarm(x, y, bin_y = TRUE, breaks_y = 10, ...)
 #' })
 #' 
+#' # the breaks for Y bins are computed for each panel independently.
+#' # we can also supply fixed bins via the 'breaks_y' argument
+#' # to obtain the same binning for each panel
+#' xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
+#'   panel = function(x, y, ...) {
+#'     panel.beeswarm(x, y, bin_y = TRUE, 
+#'       breaks_y = seq(-4, 4, length.out = 20), ...)
+#' })
+#' 
 #' @export
 panel.beeswarm <- function(x, y, 
   groups = NULL, subscripts = NULL,
@@ -52,11 +65,17 @@ panel.beeswarm <- function(x, y,
   # function to bin original data if there are too many unique values
   # of X or Y variable (discretize data)
   bin_vector <- function(x, breaks) {
-    bins <- seq(
-      min(x) + diff(range(x))/(2*breaks),
-      max(x) - diff(range(x))/(2*breaks),
-      length.out = breaks
-    )
+    if (length(breaks) == 1) {
+      bins <- seq(
+        min(x) + diff(range(x))/(2*breaks),
+        max(x) - diff(range(x))/(2*breaks),
+        length.out = breaks
+      )
+    } else {
+      bins <- breaks
+      if (min(x) < min(bins) || max(x) > max(bins))
+        warning("Some values are outside of the range specified by breaks_x/y. These value are discarded.")
+    }
     bins[cut(x, breaks = breaks, labels = FALSE)]
   }
 

@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2020-11-20
+2021-01-26
 
 <!-- badges start -->
 
@@ -182,6 +182,19 @@ xyplot(Y ~ X, df, groups = X,
 ```
 
 ![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+
+``` r
+# the breaks for Y bins are computed for each panel independently.
+# we can also supply fixed bins via the 'breaks_y' argument
+# to obtain the same binning for each panel
+xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
+  panel = function(x, y, ...) {
+    panel.beeswarm(x, y, bin_y = TRUE,
+      breaks_y = seq(-4, 4, length.out = 20), ...)
+})
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
 
 ### panel.directlabel
 

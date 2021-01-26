@@ -28,11 +28,13 @@ panel.beeswarm(
 
 \item{bin_y}{(Logical) If Y variable is to be binned or not (default FALSE).}
 
-\item{breaks_x}{(numeric) Number of breaks for x variable if \code{bin_x = TRUE}}
+\item{breaks_x}{(numeric) Number of breaks for x variable if \code{bin_x = TRUE}.
+Alternatively a numeric vector supplying the breaks for bins.}
 
-\item{breaks_y}{(numeric) Number of breaks for y variable if \code{bin_y = TRUE}}
+\item{breaks_y}{(numeric) Number of breaks for y variable if \code{bin_y = TRUE}.
+Alternatively a numeric vector supplying the breaks for bins.}
 
-\item{spread}{(numeric) Scalar indicating how much to spread the values.}
+\item{spread}{(numeric) Scalar indicating how much values should be spread.}
 
 \item{...}{Further arguments passed to \code{xyplot}}
 }
@@ -63,6 +65,15 @@ xyplot(Y ~ X, df, groups = X,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, col = grey(0.6), ...)
     panel.beeswarm(x, y, bin_y = TRUE, breaks_y = 10, ...)
+})
+
+# the breaks for Y bins are computed for each panel independently.
+# we can also supply fixed bins via the 'breaks_y' argument
+# to obtain the same binning for each panel
+xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
+  panel = function(x, y, ...) {
+    panel.beeswarm(x, y, bin_y = TRUE, 
+      breaks_y = seq(-4, 4, length.out = 20), ...)
 })
 
 }

@@ -92,6 +92,15 @@ xyplot(Y ~ X, df, groups = X,
     panel.beeswarm(x, y, bin_y = TRUE, breaks_y = 10, ...)
 })
 
+# the breaks for Y bins are computed for each panel independently.
+# we can also supply fixed bins via the 'breaks_y' argument
+# to obtain the same binning for each panel
+xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
+  panel = function(x, y, ...) {
+    panel.beeswarm(x, y, bin_y = TRUE,
+      breaks_y = seq(-4, 4, length.out = 20), ...)
+})
+
 ## ---- fig.height = 4, fig.width = 6-------------------------------------------
 library(grid)
 library(lattice)
