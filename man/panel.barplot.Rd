@@ -12,6 +12,8 @@ panel.barplot(
   error_margin = NULL,
   col = NULL,
   ewidth = NULL,
+  fill = NULL,
+  fill_alpha = 0.5,
   beside = FALSE,
   draw_points = FALSE,
   origin = NULL,
@@ -37,6 +39,10 @@ FUN_mean and FUN_errb are ignored.}
 The default, NULL, uses colors supplied by the top level function.}
 
 \item{ewidth}{(numeric) width of the error bars and whiskers}
+
+\item{fill}{(numeric, character) optionally specify custom fill for the bars (default NULL, takes colors from col)}
+
+\item{fill_alpha}{(numeric) scalar setting the transparency of the bars (default: 0.5)}
 
 \item{beside}{(logical) draw bars/points next to each other (default: FALSE)}
 
