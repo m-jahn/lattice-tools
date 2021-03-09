@@ -37,7 +37,9 @@
 # ------------------------------------------------------------------------------
 panel.key <- function (
   groups = NULL, labels = NULL,
-  which.panel = 1, pch = 1, cex = 0.8,
+  which.panel = 1, 
+  pch = lattice::trellis.par.get()$superpose.symbol$pch, 
+  cex = lattice::trellis.par.get()$superpose.symbol$cex,
   point.cex = NULL, alpha = 1,
   points = TRUE, lines = FALSE, rectangles = FALSE,
   col = NULL,
