@@ -47,7 +47,8 @@ custom.lattice <- function() {
     symbol = default_cols,
     fill = default_cols,
     region = default_cols,
-    reference = 1, bg = 0, fg = 1)
+    reference = 1, bg = 0, fg = 1,
+    pch = rep(19,7))
   theme$superpose.symbol$fill <- default_cols
   theme$strip.background$col <- c(grey(0.95), grey(0.85))
   theme$strip.shingle$col <- c(grey(0.75), grey(0.65))
@@ -88,7 +89,8 @@ custom.colorblind <- function() {
     symbol = default_cols,
     fill = default_cols,
     region = default_cols,
-    reference = 1, bg = 0, fg = 1)
+    reference = 1, bg = 0, fg = 1,
+    pch = rep(19,7))
   theme$superpose.symbol$fill <- default_cols
   theme$strip.background$col <- c(grey(0.95), grey(0.85))
   theme$strip.shingle$col <- c(grey(0.75), grey(0.65))
