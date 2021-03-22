@@ -93,8 +93,8 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
   }
 )
 
-# A similar plot but without grouping. This requires explicit
-# use of subscripts
+# A similar plot with panels, but without grouping.
+# This requires explicit use of subscripts
 xyplot(mpg ~ wt | factor(cyl), mtcars,
   pch = 19, labels = mtcars$car,
   as.table = TRUE, layout = c(3, 1),

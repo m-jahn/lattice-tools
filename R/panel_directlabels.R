@@ -62,8 +62,8 @@
 #'   }
 #' )
 #' 
-#' # A similar plot but without grouping. This requires explicit
-#' # use of subscripts
+#' # A similar plot with panels, but without grouping.
+#' # This requires explicit use of subscripts
 #' xyplot(mpg ~ wt | factor(cyl), mtcars,
 #'   pch = 19, labels = mtcars$car,
 #'   as.table = TRUE, layout = c(3, 1),
@@ -129,7 +129,7 @@ panel.directlabel <- function(
   if (all(!valid)) return(NULL)
   x <- x[valid]; y <- y[valid]
   if (!is.null(subscripts)) subscripts <- subscripts[valid]
-
+  
   # groups should be factor, otherwise coerce to it
   if (is.null(col)) {
     if (!is.null(groups)) {
@@ -157,7 +157,7 @@ panel.directlabel <- function(
   } else if (!is.null(subscripts)) {
     labels <- labels[subscripts]
   } else {
-    stop("No subscripts argument supplied. Use 'panel = function(x, y, subscripts, ...)'")
+    labels <- labels[valid]
   }
   
   # rename duplicated labels with incremental index numbers
