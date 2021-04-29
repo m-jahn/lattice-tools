@@ -130,18 +130,20 @@ panel.directlabel <- function(
   x <- x[valid]; y <- y[valid]
   if (!is.null(subscripts)) subscripts <- subscripts[valid]
   
-  # groups should be factor, otherwise coerce to it
-  if (is.null(col)) {
-    if (!is.null(groups)) {
-      groups <- as.factor(groups)
-      
-      # determine graphical parameters from groups
+  # color management
+  if (!is.null(groups)) {
+    # determine graphical parameters from groups
+    groups <- as.factor(groups)
+    if (is.null(col)) {
       cols <- lattice::trellis.par.get()$superpose.symbol$col
-      cols <- rep(cols, length.out = length(levels(groups)))
-      col <- cols[as.numeric(groups)[subscripts]]  
-      
-    # default color if no groups is supplied
     } else {
+      cols <- col
+    }
+    cols <- rep(cols, length.out = length(levels(groups)))
+    col <- cols[as.numeric(groups)[subscripts]]
+  } else {
+    # default color if no groups is supplied
+    if (is.null(col)) {
       col <- lattice::trellis.par.get()$plot.symbol$col
     }
   }
