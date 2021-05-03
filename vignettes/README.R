@@ -326,20 +326,14 @@ xyplot(mpg ~ factor(cyl), mtcars,
 library(lattice)
 data(mtcars)
 
-# colors are more subtle than default lattice theme
-xyplot(mpg ~ factor(cyl) | gear, mtcars,
-  groups = cyl, auto.key = list(columns = 3),
-  par.settings = custom.ggplot()
-)
-
-## ---- fig.height = 3, fig.width = 5-------------------------------------------
-library(lattice)
-data(mtcars)
-
-# colors are more subtle than default lattice theme
-xyplot(mpg ~ factor(cyl) | gear, mtcars,
-  groups = cyl, auto.key = list(columns = 3),
-  par.settings = custom.lattice()
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+  groups = carb, auto.key = list(columns = 3),
+  par.settings = custom.ggplot(),
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = "white")
+    panel.xyplot(x, y, ...)
+    panel.lmline(x, y, ...)
+  }
 )
 
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
@@ -347,8 +341,27 @@ library(lattice)
 data(mtcars)
 
 xyplot(mpg ~ factor(carb) | gear, mtcars,
- groups = carb, auto.key = list(columns = 3),
- par.settings = custom.colorblind()
+  groups = carb, auto.key = list(columns = 3),
+  par.settings = custom.lattice(),
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.95))
+    panel.xyplot(x, y, ...)
+    panel.lmline(x, y, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+  groups = carb, auto.key = list(columns = 3),
+  par.settings = custom.colorblind(),
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.95))
+    panel.xyplot(x, y, ...)
+    panel.lmline(x, y, ...)
+  }
 )
 
 ## ---- fig.width = 6, fig.height = 6-------------------------------------------

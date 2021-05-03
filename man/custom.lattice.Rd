@@ -4,18 +4,47 @@
 \alias{custom.lattice}
 \title{Custom grey lattice theme}
 \usage{
-custom.lattice()
+custom.lattice(
+  col = c("#00526D", colorspace::rainbow_hcl(n = 6, c = 90, l = 50)),
+  symbol_type = 19,
+  symbol_size = 1,
+  line_type = 1,
+  line_size = 1,
+  text_type = 1,
+  text_size = 1
+)
+}
+\arguments{
+\item{col}{default colors for the theme}
+
+\item{symbol_type}{symbol(s) for the theme ('pch', defaults to 19)}
+
+\item{symbol_size}{relative expansion factor (default 1)}
+
+\item{line_type}{line type(s) for the theme ('lty', defaults to 1)}
+
+\item{line_size}{relative expansion factor (default 1)}
+
+\item{text_type}{the font face, a number form 1 to 4 for normal, bold, italic, bold + italic}
+
+\item{text_size}{relative expansion factor (default 1)}
 }
 \description{
-Custom theme for lattice plots. The function takes no arguments.
+Custom theme for lattice plots. Some graphical parameters can be passed
+to override the defaults. Size parameters are relative.
 }
 \examples{
 library(lattice)
 data(mtcars)
 
-# colors are more subtle than default lattice theme
-xyplot(mpg ~ factor(cyl) | gear, mtcars,
-  groups = cyl, auto.key = list(columns = 3),
-  par.settings = custom.lattice()
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+  groups = carb, auto.key = list(columns = 3),
+  par.settings = custom.lattice(),
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = grey(0.95))
+    panel.xyplot(x, y, ...)
+    panel.lmline(x, y, ...)
+  }
 )
+
 }

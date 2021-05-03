@@ -4,18 +4,27 @@
 \alias{custom.ggplot}
 \title{Custom ggplot2 like theme}
 \usage{
-custom.ggplot()
+custom.ggplot(...)
+}
+\arguments{
+\item{...}{graphical parameters passed down to `ggplot2like()` and `simpleTheme()`}
 }
 \description{
-Custom theme for lattice plots. The function takes no arguments.
+Custom theme for lattice plots. Graphical parameters are passed down
+to `ggplot2like()`, which passes them down to `simpleTheme()`.
 }
 \examples{
 library(lattice)
 data(mtcars)
 
-# colors are more subtle than default lattice theme
-xyplot(mpg ~ factor(cyl) | gear, mtcars,
-  groups = cyl, auto.key = list(columns = 3),
-  par.settings = custom.ggplot()
+xyplot(mpg ~ factor(carb) | gear, mtcars,
+  groups = carb, auto.key = list(columns = 3),
+  par.settings = custom.ggplot(),
+  panel = function(x, y, ...) {
+    panel.grid(h = -1, v = -1, col = "white")
+    panel.xyplot(x, y, ...)
+    panel.lmline(x, y, ...)
+  }
 )
+
 }
