@@ -14,6 +14,7 @@ panel.beeswarm(
   breaks_x = 10,
   breaks_y = 10,
   spread = 0.1,
+  return_coords = FALSE,
   ...
 )
 }
@@ -35,6 +36,9 @@ Alternatively a numeric vector supplying the breaks for bins.}
 Alternatively a numeric vector supplying the breaks for bins.}
 
 \item{spread}{(numeric) Scalar indicating how much values should be spread.}
+
+\item{return_coords}{(logical) if TRUE returns a list with the calculated x- and y-coordinates 
+for each data point}
 
 \item{...}{Further arguments passed to \code{xyplot}}
 }

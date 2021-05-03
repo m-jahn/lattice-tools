@@ -18,7 +18,9 @@
 #'   Alternatively a numeric vector supplying the breaks for bins.
 #' @param breaks_y (numeric) Number of breaks for y variable if \code{bin_y = TRUE}.
 #'   Alternatively a numeric vector supplying the breaks for bins.
-#' @param spread (numeric) Scalar indicating how much values should be spread. 
+#' @param spread (numeric) Scalar indicating how much values should be spread.
+#' @param return_coords (logical) if TRUE returns a list with the calculated x- and y-coordinates 
+#'   for each data point
 #' @param ... Further arguments passed to \code{xyplot}
 #' 
 #' @importFrom lattice xyplot
@@ -59,7 +61,7 @@ panel.beeswarm <- function(x, y,
   groups = NULL, subscripts = NULL,
   bin_x = FALSE, bin_y = FALSE,
   breaks_x = 10, breaks_y = 10, 
-  spread = 0.1, ...
+  spread = 0.1, return_coords = FALSE, ...
 ) {
   
   # function to bin original data if there are too many unique values
@@ -119,4 +121,7 @@ panel.beeswarm <- function(x, y,
   # call panel.xyplot
   lattice::panel.xyplot(aux[, 1], aux[, 2], 
     groups = groups, subscripts = subscripts, ...)
+  
+  # optionally return coordinates of points
+  list(x = aux[, 1], y = aux[, 2])
 }
