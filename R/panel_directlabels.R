@@ -41,6 +41,9 @@
 #' @param box_line (character or logical) color of the box border. This
 #'   parameters takes as input a color, a logical such as TRUE (uses colors supplied by 
 #'   top level function), or NULL (the default)
+#' @param box_scale (numeric) scalar indicating how much boxes surrounding labels
+#'   should be expanded or shrunken, in fractions of current panel limits (e.g. 
+#'   0.01 of X or Y range). Defaults to NULL
 #' @param ... other arguments passed to the function
 #' 
 #' @examples
@@ -94,7 +97,7 @@ panel.directlabel <- function(
   method = directlabels::smart.grid,
   draw_text = TRUE, draw_line = TRUE,
   draw_box = FALSE, box_fill = grey(0.95),
-  box_line = NULL, ...
+  box_line = NULL, box_scale = NULL, ...
 ) {
   
   # Filtering
@@ -163,7 +166,7 @@ panel.directlabel <- function(
   }
   
   # rename duplicated labels with incremental index numbers
-  labels <- stats::ave(labels, labels, FUN = function(x) {
+  label_groups <- stats::ave(labels, labels, FUN = function(x) {
     if (length(x) == 1) return(x)
     else {
       index <- 1 + cumsum(as.numeric(duplicated(x)))
@@ -180,7 +183,7 @@ panel.directlabel <- function(
     method, d = data.frame(
       x = x_cm, y = y_cm, 
       x_orig = x_cm, y_orig = y_cm,
-      groups = labels,
+      groups = label_groups,
       label = labels,
       cex = rep(cex, length(x)), 
       index = 1:length(x)
@@ -189,8 +192,6 @@ panel.directlabel <- function(
   
   # sort not by length of character labels, but by original order
   coords <- coords[order(coords$index), ]
-  # remove indexes from labels
-  coords$groups <- gsub("\\_[0-9]*$", "", coords$groups)
   
   # convert back to native units
   coords[c("x", "x_orig", "w", "right", "left")] <-
@@ -218,12 +219,22 @@ panel.directlabel <- function(
       } else
       box_line
     
+    # apply optional shrinking factor for boxes in 
+    # fraction of current X and Y axis limits
+    if (!is.null(box_scale)) {
+      x_scalebox <- diff(current.panel.limits()$xlim)*box_scale
+      y_scalebox <- diff(current.panel.limits()$xlim)*box_scale
+    } else {
+      x_scalebox <- 0
+      y_scalebox <- 0
+    }
+    
     with(coords,
       panel.rect(
-        xleft = left + x - x_orig, 
-        ybottom = bottom + y - y_orig, 
-        xright = right + x - x_orig, 
-        ytop = top + y - y_orig, 
+        xleft = left + x - x_orig - x_scalebox,
+        ybottom = bottom + y - y_orig - y_scalebox,
+        xright = right + x - x_orig + x_scalebox,
+        ytop = top + y - y_orig + y_scalebox,
         col = box_fill, border = box_line, ...)
     )
   }
@@ -231,7 +242,7 @@ panel.directlabel <- function(
   # draw text
   if (draw_text) {
     with(coords, 
-      panel.text(x, y, labels = groups, 
+      panel.text(x, y, labels = label, 
         col = col, cex = cex, ...)
     )
   }

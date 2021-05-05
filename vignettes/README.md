@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-05-03
+2021-05-05
 
 <!-- badges start -->
 
@@ -199,13 +199,13 @@ xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
 ### panel.directlabel
 
 Point labels for scatterplots. Draw text labels for all points of a
-scatterplot using functions from directlabels. In contrast to the
-functionality of the original `directlabels` package, *every point* is
-labeled instead of groups. Labels are also independent from the grouping
-variable, so that e.g. colors indicate a grouping variable and labels
-another. By default, labels adapt the graphical parameters of the higher
-level plot, including coloring according to groups. However, many
-parameters can be customized.
+scatterplot using internal functionality from the `directlabels`
+package. In contrast to the functionality of the original `directlabels`
+package, *every point* is labeled instead of groups. Labels are also
+independent from the grouping variable, so that e.g. colors indicate a
+grouping variable and labels another. By default, labels adapt the
+graphical parameters of the higher level plot, including coloring
+according to groups. However, many parameters can be customized.
 
 ``` r
 library(grid)

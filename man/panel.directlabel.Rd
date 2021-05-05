@@ -21,6 +21,7 @@ panel.directlabel(
   draw_box = FALSE,
   box_fill = grey(0.95),
   box_line = NULL,
+  box_scale = NULL,
   ...
 )
 }
@@ -61,6 +62,10 @@ which labels should be drawn and which not (default: NULL)}
 \item{box_line}{(character or logical) color of the box border. This
 parameters takes as input a color, a logical such as TRUE (uses colors supplied by 
 top level function), or NULL (the default)}
+
+\item{box_scale}{(numeric) scalar indicating how much boxes surrounding labels
+should be expanded or shrunken, in fractions of current panel limits (e.g. 
+0.01 of X or Y range). Defaults to NULL}
 
 \item{...}{other arguments passed to the function}
 }
