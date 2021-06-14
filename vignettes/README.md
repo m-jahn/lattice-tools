@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-05-05
+2021-06-14
 
 <!-- badges start -->
 
@@ -15,7 +15,7 @@ commit](https://img.shields.io/github/last-commit/m-jahn/lattice-tools)
 ![Platform](https://img.shields.io/badge/platform-all-green)
 <!-- badges end -->
 
------
+------------------------------------------------------------------------
 
 Panel functions and wrappers that extend the R lattice universe
 
@@ -29,7 +29,7 @@ collected here were added over time and might not always adhere
 perfectly to the `lattice` conventions. However some care was taken to
 replicate the original lattice behavior so that **users can use grouping
 and paneling** as they are used to. Feel free to copy, fork or source
-functions that you find useful. Contributions welcome\!
+functions that you find useful. Contributions welcome!
 
 ## Installation
 
@@ -530,6 +530,60 @@ xyplot(mpg ~ factor(cyl), mtcars,
 
 ![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
+### panel.violinscatter
+
+Combine violin plot and scatter plot. Custom lattice panel function that
+combines violin and scatter plot to a violin-shaped scatter plot. By
+default, the underlying violin is plotted with the generic
+`panel.violin` function. On top of that are the points drawn from which
+the violin was calculated. To achieve this, each point is jittered
+randomly on the X (Y) axis according to the density estimate of the Y
+(X) axis.
+
+``` r
+# use singer data from lattice
+library(lattice)
+data(singer)
+singer$voice.part <- gsub(" [12]", "", as.character(singer$voice.part))
+singer$voice.part <- factor(singer$voice.part, c("Soprano", "Alto", "Tenor", "Bass"))
+
+# example with grouping
+xyplot(height ~ voice.part, singer, groups = voice.part,
+  horizontal = FALSE, pch = 19,
+  panel = function(x, y, ...) {
+    panel.violinscatter(x, y, ...)
+})
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+# same plot but horizontal orientation
+xyplot(voice.part ~ height, singer, groups = voice.part,
+  horizontal = TRUE, pch = 19,
+  panel = function(x, y, ...) {
+    panel.violinscatter(x, y, ...)
+})
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+``` r
+# example with more and non-discrete data points
+df <- data.frame(
+  sample = factor(rep(c("A", "B", "C"), each = 300)),
+  variable = c(rnorm(300, 0, 3), rnorm(300, 1, 2), rnorm(300, 3, 3))
+)
+
+xyplot(variable ~ sample, df,
+  horizontal = FALSE, pch = 19, cex = 0.4,
+  panel = function(x, y, ...) {
+    panel.violinscatter(x, y, ...)
+})
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+
 ### custom.ggplot
 
 Custom theme for lattice plots. The function takes no arguments.
@@ -549,7 +603,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -570,7 +624,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -596,7 +650,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -614,7 +668,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -627,4 +681,4 @@ custom_splom(
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->

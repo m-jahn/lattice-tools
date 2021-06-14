@@ -323,6 +323,39 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
+# use singer data from lattice
+library(lattice)
+data(singer)
+singer$voice.part <- gsub(" [12]", "", as.character(singer$voice.part))
+singer$voice.part <- factor(singer$voice.part, c("Soprano", "Alto", "Tenor", "Bass"))
+
+# example with grouping
+xyplot(height ~ voice.part, singer, groups = voice.part,
+  horizontal = FALSE, pch = 19,
+  panel = function(x, y, ...) {
+    panel.violinscatter(x, y, ...)
+})
+
+# same plot but horizontal orientation
+xyplot(voice.part ~ height, singer, groups = voice.part,
+  horizontal = TRUE, pch = 19,
+  panel = function(x, y, ...) {
+    panel.violinscatter(x, y, ...)
+})
+
+# example with more and non-discrete data points
+df <- data.frame(
+  sample = factor(rep(c("A", "B", "C"), each = 300)),
+  variable = c(rnorm(300, 0, 3), rnorm(300, 1, 2), rnorm(300, 3, 3))
+)
+
+xyplot(variable ~ sample, df,
+  horizontal = FALSE, pch = 19, cex = 0.4,
+  panel = function(x, y, ...) {
+    panel.violinscatter(x, y, ...)
+})
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
 library(lattice)
 data(mtcars)
 
