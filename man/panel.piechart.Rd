@@ -13,6 +13,7 @@ panel.piechart(
   diameter_sector = 0.2,
   clockwise = FALSE,
   start_angle = if (clockwise) 90 else 0,
+  draw_labels = TRUE,
   col = NULL,
   border = NULL,
   lty = NULL,
@@ -24,9 +25,9 @@ panel.piechart(
 \arguments{
 \item{x}{(numeric, character) variable to be plotted}
 
-\item{groups}{grouping variable passed down from xyplot (does not need to be specified)}
+\item{groups}{grouping variable passed down from `xyplot` (does not need to be specified)}
 
-\item{subscripts}{subscripts passed down from xyplot (does not need to be specified)}
+\item{subscripts}{subscripts passed down from `xyplot` (does not need to be specified)}
 
 \item{fun}{(function) used to perform optional aggregation over groups (default: sum)}
 
@@ -34,21 +35,22 @@ panel.piechart(
 
 \item{diameter_sector}{(numeric) diameter of the outer circle of the pie/ring (default: 0.2)}
 
-\item{clockwise}{not impemented yet}
+\item{clockwise}{not implemented yet}
 
-\item{start_angle}{not impemented yet}
+\item{start_angle}{not implemented yet}
+
+\item{draw_labels}{(logical) switch drawing of labels on or off (default: TRUE)}
 
 \item{col, border, lty, lwd, cex}{(character, numeric) graphical parameters}
 
 \item{...}{other arguments passed to the function}
 }
 \description{
-This custom panel function for lattice plots allows to draw
-pie charts (or rings) while still being able to use the typical
-lattice way of subsetting data. The function can be used
-within xyplot() but only one variable needs to be supplied (x).
-Grouping is supported in which the x variable is aggregated (summed up) over
-each unique group.
+This panel function allows to draw pie charts (or rings) while still 
+being able to use the typical lattice way of subsetting data. 
+The function can be used within `xyplot()` but only one variable needs 
+to be supplied (`x`). Grouping is supported in the sense that the `x` 
+variable is aggregated (summed up) over each unique group.
 }
 \examples{
 library(grid)
@@ -59,7 +61,7 @@ data("USMortality")
 # A simple example using lattice paneling
 xyplot( ~ Rate | Sex, USMortality,
   main = "US mortality rates by sex",
-  scales = list(draw = FALSE),
+  scales = list(draw = FALSE), cex = 0.7,
   panel = function(x, ...) {
     panel.piechart(x, ...)
   }

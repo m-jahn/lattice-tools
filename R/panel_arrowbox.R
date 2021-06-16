@@ -1,8 +1,8 @@
-#' Panel function to draw box like arrows
+#' Panel function to draw box-like arrows
 #'
-#' Custom lattice panel function to draw boxes with arrow head from 2 XY 
-#' coordinates and direction argument. Each argument can be a vector of same legnth
-#' so that multiple arrows can be dran at once.
+#' Panel function to draw boxes with arrow head from 2 XY coordinates and 
+#' direction argument. Each argument can be a vector of same length so that 
+#' multiple arrows can be drawn at once. Is internally used in `panel.geneplot`.
 #'
 #' @param x0,x1,y0,y1 (numeric) coordinates of the two points determining the 
 #'   rectangle (bottom left, top right).
@@ -15,11 +15,10 @@
 #' @examples
 #' library(lattice)
 #' 
-#' xyplot(1:3 ~ 4:6, col = grey(0.5),
+#' xyplot(1:3 ~ 4:6, col = "#0080ff",
 #'   panel = function(x, y, ...) {
-#'     panel.xyplot(x, y, ...)
-#'     panel.arrowbox(x0 = c(4, 5), y0 = c(2.5, 1), 
-#'       x1 = c(5, 6), y1 = c(3, 1.5), 
+#'     panel.arrowbox(x0 = c(4, 5), y0 = c(2.5, 1),
+#'       x1 = c(5, 6), y1 = c(3, 1.5),
 #'       direction = c(1, -1), ...)
 #'   }
 #' )

@@ -70,11 +70,11 @@ should be expanded or shrunken, in fractions of current panel limits (e.g.
 \item{...}{other arguments passed to the function}
 }
 \description{
-Draw text labels for all points of a scatterplot using functions from 
-\code{directlabels}.
-In contrast to the functionality of the original directlabels package,
-every point is labelled instead of groups. Labels are also independent from
-the grouping variable, so that e.g. colors indicate a grouping variable and 
+Draw text labels for all points of a scatterplot using internal functionality from the
+\code{directlabels} package.
+In contrast to the functionality of the original \code{directlabels} package,
+every point is labelled instead of groups of points. Labels are also independent from
+the grouping variable, so that e.g. colors indicate one grouping variable and 
 labels another. By default, labels adapt the graphical parameters of the 
 higher level plot, including coloring according to groups. However, many parameters
 can be customized.
@@ -102,7 +102,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 # This requires explicit use of subscripts
 xyplot(mpg ~ wt | factor(cyl), mtcars,
   pch = 19, labels = mtcars$car,
-  as.table = TRUE, layout = c(3, 1),
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
   panel = function(x, y, subscripts, ...) {
     panel.xyplot(x, y, ...)
     panel.directlabel(x, y, subscripts = subscripts, 

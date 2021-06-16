@@ -38,10 +38,12 @@ std = 'all_values', each unique group of x is compared to the total population}
 
 \item{cex}{(numeric) character size of the symbol}
 
-\item{offset}{(numeric) offset added to the the vertical position of the p-value}
+\item{offset}{(numeric) offset in native plot units used to adjust the position of text labels.
+If offset is length 1, only the vertical position is adjusted; if it is length 2 the horizontal 
+and vertical position is adjusted}
 
-\item{fixed_pos}{(numeric) vertical position of the p-value, 
-if NULL determined from the data}
+\item{fixed_pos}{(numeric) fixed vertical position of the p-value, 
+if NULL determined from the data (the default)}
 
 \item{verbose}{(logical) if a summary of the p-value calculation should be 
 printed to the terminal}
@@ -53,13 +55,15 @@ printed to the terminal}
 \item{...}{other arguments passed to the function}
 }
 \description{
-Custom panel functions for lattice plots
+This panel function allows to overlay p-values obtained from a statistical
+significance test on plots, together with "significance" symbols such 
+as stars as it is often in encountered in the scientific literature.
 }
 \examples{
 library(lattice)
 data(mtcars)
 
-# p-values are calculated between groups of x, grouping variable is ignored
+# p-values are calculated between groups of x, grouping is ignored
 xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
   panel = function(x, y, ...) {
     panel.stripplot(x, y, jitter.data = TRUE, 

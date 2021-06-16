@@ -1,6 +1,6 @@
 #' Custom scatterplot matrix (SPLOM)
 #' 
-#' Custom wrapper function around lattice `splom` with different upper and lower panel.
+#' A wrapper function around lattice `splom` with different upper and lower panels.
 #' A scatterplot matrix is a tiled plot where all variables of a data frame are plotted against each other.
 #' 
 #' @importFrom lattice splom

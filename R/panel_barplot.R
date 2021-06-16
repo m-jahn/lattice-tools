@@ -1,9 +1,9 @@
 #' Draw barplot with error bars in lattice plots
 #' 
-#' This custom panel function for lattice plots allows to draw
-#' barplots with error bars for arbitrary groups of data points.
-#' Error bars will be drawn for groups of identical x values with
-#' optional subsetting by grouping or paneling variables.
+#' This panel function allows to draw barplots with error bars for arbitrary 
+#' groups of data points. Error bars will be drawn for groups of identical `x`
+#' values with optional subsetting by grouping or paneling variables. This 
+#' function is very similar to `panel.errbars` only with bars instead of points.
 #' 
 #' @importFrom stats sd
 #' @importFrom colorspace adjust_transparency
@@ -69,7 +69,7 @@
 #'   stdev = with(mtcars, tapply(mpg, cyl, sd))
 #' )
 #' 
-#' # you might have to adjust the yscale as it is determined from the
+#' # you might have to adjust the y-scale as it is determined from the
 #' # range of the y variable only, ignoring the extension through error bars.
 #' xyplot(mpg ~ factor(cyl), mtcars_means,
 #'   error_margin = mtcars_means$stdev,

@@ -21,9 +21,9 @@ will be coerced to factorand then numeric if possible}
 \item{...}{other arguments passed to the function}
 }
 \description{
-Custom lattice panel function to plot one more grouping variable encoded 
-by symbols ('pch'), instead of just the default encoded by color. Inspired by
-\code{panel.bubbleplot} from package \code{tactile}.
+This panel function allows to plot one additional grouping variable encoded
+by symbols ('pch') instead of just the default grouping by color.
+Inspired by `panel.bubbleplot` from package `tactile`.
 }
 \examples{
 library(lattice)

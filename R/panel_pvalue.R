@@ -1,6 +1,8 @@
 #' Calculate and draw p-values in lattice plots
 #' 
-#' Custom panel functions for lattice plots
+#' This panel function allows to overlay p-values obtained from a statistical
+#' significance test on plots, together with "significance" symbols such 
+#' as stars as it is often in encountered in the scientific literature.
 #' 
 #' @import grid
 #' @import lattice
@@ -19,9 +21,11 @@
 #' @param pvalue (logical) if numeric p-values should be drawn for significance
 #' @param pval_digits (numeric) how many p-value digits should be printed (default is 2)
 #' @param cex (numeric) character size of the symbol
-#' @param offset (numeric) offset added to the the vertical position of the p-value
-#' @param fixed_pos (numeric) vertical position of the p-value, 
-#'   if NULL determined from the data
+#' @param offset (numeric) offset in native plot units used to adjust the position of text labels.
+#'   If offset is length 1, only the vertical position is adjusted; if it is length 2 the horizontal 
+#'   and vertical position is adjusted
+#' @param fixed_pos (numeric) fixed vertical position of the p-value, 
+#'   if NULL determined from the data (the default)
 #' @param verbose (logical) if a summary of the p-value calculation should be 
 #'   printed to the terminal
 #' @param alternative (character) Passed to t.test(), one of "two.sided", "less", or "greater"
@@ -32,7 +36,7 @@
 #' library(lattice)
 #' data(mtcars)
 #' 
-#' # p-values are calculated between groups of x, grouping variable is ignored
+#' # p-values are calculated between groups of x, grouping is ignored
 #' xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
 #'   panel = function(x, y, ...) {
 #'     panel.stripplot(x, y, jitter.data = TRUE, 
@@ -59,57 +63,82 @@ panel.pvalue <- function(x, y, std = NULL,
 
   # if no standard is passed to function, just take the first unique x
   if (is.null(std)) {
-    std = unique(x)[1]
+    std <- 1
   } else if (is.numeric(std)) {
-    std = unique(x)[std]
+    stopifnot(std %in% seq_along(unique(x)))
   } else if (std == "all_values") {
-    std = x
+    std <- seq_along(unique(x))
   } else if (is.character(std)) {
     stopifnot(std %in% x)
+    std <- which(unique(x) %in% std) 
   }
+  std_val <- unique(x)[std]
   
   # calculate p-value between all x-variable groups and standard
   pval <- tapply(y, x, function(z) {
-    t.test(z, y[x == std], alternative = alternative)$p.value
+    t.test(z, y[x == std_val], alternative = alternative)$p.value
   })
-  if (verbose) {
-    cat("p-value for comparison of ", std, "\n with ", 
-      as.character(unique(x)), " = ", pval, "\n")
+  
+  # construct and print p-value symbols
+  pval_symbol <- sapply(pval, function(x) {
+    if (is.na(x)) "" else
+    if (x <= 0.001) "***" else
+    if (x <= 0.01 & x > 0.001) "**" else
+    if (x <= 0.05 & x > 0.01) "*" else ""
+  })
+    
+  # collect all p-value data in a df
+  df_pval <- data.frame(row.names = seq_along(unique(x)),
+    Var_1 = rep(std_val, length(unique(x))),
+    Var_2 = unique(x),
+    p_value = pval,
+    p_value_text = paste0("\np = ", gsub("e", "x10^", format(pval, nsmall = 3, digits = pval_digits))),
+    p_sig = pval_symbol,
+    test = rep(paste("t-test,", alternative), length(unique(x)))
+  )
+  
+  # determine offset for X and Y position
+  if (is.null(offset)) {
+    offset <- c(0, 0)
+  } else if (is.numeric(offset)) {
+    if (length(offset) == 1) offset <- c(0, offset) else
+    if (length(offset) == 2) offset <- offset
+  } else {
+    stop("Offset must be NULL or a numeric value of length 1 or 2")
   }
   
-  # determine Y position of p-value character
+  # determine X position of p-value text
+  df_pval$x_pos <- seq_along(unique(x))+offset[1]
+  
+  # determine Y position of p-value text
   if (is.null(fixed_pos)) {
     ypos = tapply(y, x, function(z) {
       s <- max(z, na.rm = TRUE)
       s <- s+abs(s/3)
       replace(s, s > max(y), max(y))
     })
-    
+    df_pval$y_pos <- ypos+offset[2]
   } else if (is.numeric(fixed_pos)){
-    ypos = fixed_pos
+    df_pval$y_pos <- fixed_pos+offset[2]
   } else {
     stop("fixed_pos must be NULL for automatic y positioning, or a numeric value.")
   }
   
-  # construct and print p-value symbols
-  if (symbol) {
-    pval_symbol <- sapply(pval, function(x) {
-      if (is.na(x)) "" else
-      if (x <= 0.001) "***" else
-      if (x <= 0.01 & x > 0.001) "**" else
-      if (x <= 0.05 & x > 0.01) "*" else ""
-    })
-    panel.text(1:length(pval), ypos, labels = pval_symbol, 
-      cex = 2*cex, pos = 1, offset = offset, col = col, ...)
+  # optionally print summary table
+  if (verbose) {
+    print(df_pval)
   }
   
-  # construct and print numeric p-values
-  if (pvalue) {
-    pval = paste0(
-      "\n\np = ", gsub("e", "x10^", format(pval, nsmall = 3, digits = pval_digits))
-    )
-    panel.text(1:length(pval), ypos, labels = pval, 
-      cex = cex, pos = 1, offset = offset, col = col, ...)
-  }
+  # finally print p-value text labels
+  with(df_pval[-std, ], {
+    if (symbol) {
+      panel.text(x_pos, y_pos, labels = p_sig,
+        cex = 2*cex, pos = 1, col = col, ...)
+    }
+    if (pvalue) {
+      panel.text(x_pos, y_pos, labels = p_value_text,
+        cex = cex, pos = 1, col = col, ...)
+    }
+  })
   
 }

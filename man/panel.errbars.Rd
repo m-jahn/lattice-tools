@@ -48,10 +48,11 @@ The default, NULL, uses colors supplied by the top level function.}
 \item{...}{other arguments passed to the function}
 }
 \description{
-This custom panel function for lattice plots allows to draw
-symbols with error bars for arbitrary groups of data points.
-Error bars will be drawn for groups of identical x values with
-optional subsetting by grouping or paneling variables.
+Draw error bars in lattice plots. This panel function allows to draw 
+symbols with error bars for arbitrary groups of data points. Error bars 
+will be drawn for groups of identical x values with optional subsetting 
+by grouping or paneling variables. This function is very similar to 
+`panel.barplot` only with points instead of bars.
 }
 \examples{
 library(lattice)
@@ -76,13 +77,11 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 
 # we can also use different variables for the x var, grouping,
-# and paneling. As a visual control that error bars are drawn 
-# for the correct groups we overlay the single data points. 
+# and paneling.
 xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
-  groups = gear, lwd = 2, cex = 1.5,
-  auto.key = list(columns = 3),
+  groups = gear, lwd = 2, pch = 19, cex = 1.5,
   panel = function(x, y, ...) {
-    panel.errbars(x, y, beside = TRUE, draw_points = TRUE, ...)
+    panel.errbars(x, y, beside = TRUE, ...)
   }
 )
 

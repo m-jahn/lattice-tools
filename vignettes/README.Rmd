@@ -24,11 +24,11 @@ Panel functions and wrappers that extend the R lattice universe
 
 ## Description
 
-This package contains panel functions and wrapper functions for the R `lattice` package, a general purpose plotting package from Deepayan Sarkar. Lattice's functionality is comparable to the popular `ggplot2` package but has a slightly different look and feel. The functions collected here were added over time and might not always adhere perfectly to the `lattice` conventions. However some care was taken to replicate the original lattice behavior so that **users can use grouping and paneling** as they are used to. Feel free to copy, fork or source functions that you find useful. Contributions welcome!
+This package contains panel functions and themes for the R `lattice` package, a general purpose plotting package from Deepayan Sarkar. Lattice's functionality is comparable to the popular `ggplot2` package but has a slightly different look and feel. The functions in this package adhere as far as possible to the `lattice` conventions but might in some cases deviate from default behavior. However, some care was taken to replicate the original lattice behavior so that users can apply grouping and paneling as they are used to. Feel free to copy, fork or source functions that you find useful. Contributions welcome!
 
 ## Installation
 
-To install the package directly from github, use this function from `devtools` package in your R session:
+To install the package directly from github, use this function from the `devtools` package in your R session:
 
 ```{r, eval = FALSE}
 require(devtools)
@@ -46,14 +46,13 @@ set.seed(123)
 
 ### panel.arrowbox
 
-Custom lattice panel function to draw boxes with arrow head from 2 XY coordinates and direction argument. Each argument can be a vector of same length so that multiple arrows can be drawn at once. Useful for `panel.geneplot` function.
+Panel function to draw boxes with arrow head from 2 XY coordinates and direction argument. Each argument can be a vector of same length so that multiple arrows can be drawn at once. Is internally used in `panel.geneplot`.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
 
-xyplot(1:3 ~ 4:6, col = grey(0.7),
+xyplot(1:3 ~ 4:6, col = "#0080ff",
   panel = function(x, y, ...) {
-    panel.xyplot(x, y, ...)
     panel.arrowbox(x0 = c(4, 5), y0 = c(2.5, 1),
       x1 = c(5, 6), y1 = c(3, 1.5),
       direction = c(1, -1), ...)
@@ -64,7 +63,7 @@ xyplot(1:3 ~ 4:6, col = grey(0.7),
 
 ### panel.barplot
 
-Draw a barplot with error bars in lattice plots. This custom panel function for lattice plots allows to draw barplots with error bars for arbitrary groups of data points. Error bars will be drawn for groups of identical x values with optional subsetting by grouping or paneling variables.
+Draw a barplot with error bars in lattice plots. This panel function allows to draw barplots with error bars for arbitrary groups of data points. Error bars will be drawn for groups of identical x values with optional subsetting by grouping or paneling variables. This function is very similar to `panel.errbars` only with bars instead of points.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(latticetools)
@@ -94,9 +93,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
   groups = gear, lwd = 2, auto.key = list(columns = 3),
   panel = function(x, y, ...) {
-    panel.barplot(x, y, beside = TRUE, ...)
-    panel.stripplot(x, y, jitter.data = TRUE,
-      horizontal = FALSE, amount = 0.15, ...)
+    panel.barplot(x, y, beside = TRUE, draw_points = TRUE, ...)
   }
 )
 
@@ -109,7 +106,7 @@ mtcars_means <- data.frame(
   stdev = with(mtcars, tapply(mpg, cyl, sd))
 )
 
-# you might have to adjust the yscale as it is determined from the
+# you might have to adjust the y-scale as it is determined from the
 # range of the y variable only, ignoring the extension through error bars.
 xyplot(mpg ~ factor(cyl), mtcars_means,
   error_margin = mtcars_means$stdev,
@@ -124,7 +121,7 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 
 ### panel.beeswarm
 
-Panel function for beeswarm plots. This panel function works essentially like a stripplot, but instead of randomly scattering a variable produces a regular, grid-like pattern of points. Currently only the X variable is transformed. However, X and Y variables can be discretized optionally.
+Panel function for beeswarm plots. This panel function works essentially like a stripplot, but instead of randomly scattering a variable produces a regular, grid-like pattern of points. Currently only the X variable is transformed. Continuously distributed data points can be optionally discretized, both for X and for Y variable.
 
 ```{r, fig.height = 3, fig.width = 5}
 # simple example
@@ -133,6 +130,7 @@ df <- data.frame(
   X = factor(rep(1:3, each = 20))
 )
 
+# beeswarm plot
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 
 # but with continuous Y variable, it doesn't work as expected
@@ -142,7 +140,6 @@ xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 # for this purpose we can bin the Y variable into groups
 xyplot(Y ~ X, df, groups = X, 
   panel = function(x, y, ...) {
-    panel.xyplot(x, y, col = grey(0.6), ...)
     panel.beeswarm(x, y, bin_y = TRUE, breaks_y = 10, ...)
 })
 
@@ -158,7 +155,7 @@ xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
 
 ### panel.directlabel
 
-Point labels for scatterplots. Draw text labels for all points of a scatterplot using internal functionality from the `directlabels` package. In contrast to the functionality of the original `directlabels` package, *every point* is labeled instead of groups. Labels are also independent from the grouping variable, so that e.g. colors indicate a grouping variable and labels another. By default, labels adapt the graphical parameters of the higher level plot, including coloring according to groups. However, many parameters can be customized.
+Point labels for scatterplots. Draw text labels for all points of a scatterplot using internal functionality from the `directlabels` package. In contrast to the original `directlabels` package, *every point* is labeled instead of groups of points. Labels are also independent from the grouping variable, so that e.g. colors indicate one grouping variable and labels another. By default, labels adapt the graphical parameters of the higher level plot, including coloring according to groups. However, many parameters can be customized.
 
 ```{r, fig.height = 4, fig.width = 6}
 library(grid)
@@ -183,7 +180,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 # use of subscripts
 xyplot(mpg ~ wt | factor(cyl), mtcars,
   pch = 19, labels = mtcars$car,
-  as.table = TRUE, layout = c(3, 1),
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
   panel = function(x, y, subscripts, ...) {
     panel.xyplot(x, y, ...)
     panel.directlabel(x, y, subscripts = subscripts, 
@@ -205,7 +202,7 @@ xyplot(mpg ~ wt, mtcars,
 
 ### panel.errbars
 
-Draw error bars in lattice plots. This custom panel function for lattice plots allows to draw symbols with error bars for arbitrary groups of data points. Error bars will be drawn for groups of identical x values with optional subsetting by grouping or paneling variables. This function is very similar to `panel.barplot` only with points instead of bars.
+Draw error bars in lattice plots. This panel function allows to draw symbols with error bars for arbitrary groups of data points. Error bars will be drawn for groups of identical x values with optional subsetting by grouping or paneling variables. This function is very similar to `panel.barplot` only with points instead of bars.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
@@ -230,14 +227,10 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 
 # we can also use different variables for the x var, grouping,
-# and paneling. As a visual control that error bars are drawn 
-# for the correct groups we overlay the single data points. 
+# and paneling.
 xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
   groups = gear, lwd = 2, pch = 19, cex = 1.5,
-  auto.key = list(columns = 3),
   panel = function(x, y, ...) {
-    panel.stripplot(x, y, jitter.data = TRUE, 
-      horizontal = FALSE, amount = 0.15, alpha = 0.3, ...)
     panel.errbars(x, y, beside = TRUE, ...)
   }
 )
@@ -265,7 +258,7 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 
 ### panel.geneplot
 
-Plot genes along a linear axis. Custom lattice panel function to draw genes with start and end coordinates as main input. Optional vectors for `gene_name` or `gene_strand` must have same length as `x`, `y`. Panel function supports paneling and grouping (e.g. by gene functional category) just as regular panel functions.
+Plot genes along a linear axis. This panel function allows to draw genes with start and end coordinates as main input. Optional vectors for `gene_name` or `gene_strand` must have same length as `x`, `y`. This function supports paneling and grouping (e.g. by gene functional category) just as regular panel functions.
 
 ```{r, fig.height = 2.5, fig.width = 5}
 library(lattice)
@@ -311,31 +304,32 @@ xyplot(gene_end ~ gene_start, genes,
 
 ### panel.key
 
-Draw custom keys in lattice plots. This custom panel function for lattice plots allows to draw a key (legend) inside a lattice panel, with more customization options than the lattice default.
+Draw custom keys in lattice plots. This panel function allows to draw a key (legend) inside a lattice panel, with more customization options than the lattice default.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
 data(mtcars)
 
-# Two examples for a custom lattice key
-# inside a panel. The first with taking all arguments from the 
-# top-level plotting function, the second with custom arguments.
+# Two examples for a custom lattice key inside a panel.
+# The first takes all arguments from the 
+# top-level plotting function.
+# The second has custom arguments.
 xyplot(mpg ~ 1/wt | factor(vs), mtcars,
-  groups = carb, pch = 19, cex = 1,
+  groups = carb, pch = 19,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
     panel.key(...)
     panel.key(labels = letters[1:5], which.panel = 2, 
-      corner = c(0.9, 0.1), col = 1:5, pch = 3, cex = 1)
+      corner = c(0.9, 0.1), col = 1:5, pch = 1:5)
   }
 )
 ```
 
 ### panel.piechart
 
-Draw pie and ring charts in lattice plots. This custom panel function for lattice plots allows to draw pie charts (or rings) while still being able to use the typical lattice way of subsetting data. The function can be used within xyplot() but only one variable needs to be supplied (x). Grouping is supported in which the x variable is aggregated (summed up) over each unique group.
+Draw pie and ring charts in lattice plots. This panel function allows to draw pie charts (or rings) while still being able to use the typical lattice way of subsetting data. The function can be used within `xyplot()` but only one variable needs to be supplied (`x`). Grouping is supported in the sense that the `x` variable is aggregated (summed up) over each unique group.
 
-```{r, fig.height = 3, fig.width = 5}
+```{r, fig.height = 3.5, fig.width = 5.5}
 library(grid)
 library(lattice)
 
@@ -344,7 +338,7 @@ data("USMortality")
 # A simple example using lattice paneling
 xyplot( ~ Rate | Sex, USMortality,
   main = "US mortality rates by sex",
-  scales = list(draw = FALSE),
+  scales = list(draw = FALSE), cex = 0.7,
   panel = function(x, ...) {
     panel.piechart(x, ...)
   }
@@ -367,24 +361,26 @@ xyplot( ~ Rate | Sex, USMortality,
 
 ### panel.pvalue
 
-Calculate and draw p-values in lattice plots.
+Calculate and draw p-values in lattice plots. This panel function allows to overlay p-values obtained from a statistical significance test on plots, together with "significance" symbols such as stars as it is often in encountered in the scientific literature. By default, the function applies Student's (2-sided) `t.test` to each pair of a unique X variable and a standard. By default, the standard is the first unique value of X, but can be specified manually.
 
-```{r, fig.height = 3, fig.width = 5}
+```{r, fig.height = 4, fig.width = 5}
 library(lattice)
 data(mtcars)
 
-# p-values are calculated between groups of x, grouping variable is ignored
-xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
+# p-values are calculated between groups of x, grouping is ignored
+xyplot(mpg ~ factor(cyl), mtcars, groups = cyl,
+  pch = 19, cex = 0.8, ylim = c(8, 40),
   panel = function(x, y, ...) {
     panel.stripplot(x, y, jitter.data = TRUE, 
       horizontal = FALSE, amount = 0.15, ...)
-    panel.pvalue(x, y, std = 1, symbol = TRUE, pvalue = TRUE)
+    panel.pvalue(x, y, symbol = TRUE, pvalue = TRUE,
+      offset = 1, verbose = TRUE)
 })
 ```
 
 ### panel.quadrants
 
-Draw quadrants and quadrant statistics in lattice plots. This custom panel function for lattice plots allows to draw custom quadrants and display additional quadrant statistics as often used in biomedial sciences. Groups are ignored.
+Draw quadrants and quadrant statistics in lattice plots. This panel function allows to draw custom quadrants and display additional quadrant statistics as often used in biomedical sciences. Grouping is ignored.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
@@ -404,7 +400,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 
 ### panel.symbols
 
-Plot a grouping variable encoded by symbols. Custom lattice panel function to plot one more grouping variable encoded by symbols ('pch'), instead of just the default encoded by color. Inspired by `panel.bubbleplot` from package `tactile`.
+Plot a grouping variable encoded by symbols. This panel function allows to plot one additional grouping variable encoded by symbols ('pch') instead of just the default grouping by color. Inspired by `panel.bubbleplot` from package `tactile`.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
@@ -421,7 +417,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 
 ### panel.violinscatter
 
-Combine violin plot and scatter plot. Custom lattice panel function that combines violin and scatter plot to a violin-shaped scatter plot. By default, the underlying violin is plotted with the generic `panel.violin` function. On top of that are the points drawn from which the violin was calculated. To achieve this, each point is jittered randomly on the X (Y) axis according to the density estimate of the Y (X) axis.
+Combine violin plot and scatter plot. This panel function combines violin and scatter plot to a violin-shaped scatter plot. By default, the underlying violin is plotted with the generic `panel.violin` function. On top of that are the points drawn from which the violin was calculated. To achieve this, each point is jittered randomly on the X (Y) axis according to the kernel density estimate of the Y (X) axis. All parameters that work for `panel.violin` can be used with this function too (e.g. to control the kernel density function). In addition to that, this function supports grouping by color and is therefore more flexible than the canonical `panel.violin`.
 
 ```{r, fig.height = 3, fig.width = 5}
 # use singer data from lattice
@@ -459,7 +455,8 @@ xyplot(variable ~ sample, df,
 
 ### custom.ggplot
 
-Custom theme for lattice plots. The function takes no arguments.
+Custom `ggplot2` like theme for lattice plots. Graphical parameters are passed
+down to `ggplot2like()`, which passes them down to `simpleTheme()`.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
@@ -479,7 +476,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 
 ### custom.lattice
 
-Custom theme for lattice plots. The function takes no arguments.
+Custom grey theme for lattice plots. Some graphical parameters can be passed to override the defaults. Size parameters are relative.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
@@ -498,7 +495,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 
 ### custom.colorblind
 
-Colorblind-safe grey lattice theme. The function takes no arguments. Colorblind-safe color scale with 7 colors was adapted from R color brewer, see `RColorBrewer::brewer.pal(8, "Dark2"))`. Color blind safe colors are distinguishable for most common types of color blindness (deuterotopia, deuteroanomaly), yet still look good for non color blind people.
+Colorblind-safe grey lattice theme. Colorblind-safe color scale with 7 colors was adapted from R color brewer, see `RColorBrewer::brewer.pal(8, "Dark2"))`. Color blind safe colors are distinguishable for most common types of color blindness (deuterotopia, deuteroanomaly), yet still look good for non color blind people. Some graphical parameters can be passed to override the defaults. Size parameters are relative.
 
 ```{r, fig.height = 3, fig.width = 5}
 library(lattice)
@@ -517,7 +514,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 
 ### custom_splom
 
-Custom scatterplot matrix (SPLOM). Custom wrapper function around lattice 'splom' with different upper and lower panel. A scatterplot matrix is a tiled plot where all variables of a data frame are plotted against each other.
+Custom scatterplot matrix (SPLOM). A wrapper function around lattice 'splom' with different upper and lower panels. A scatterplot matrix is a tiled plot where all variables of a data frame are plotted against each other.
 
 ```{r, fig.width = 6, fig.height = 6}
 library(lattice)

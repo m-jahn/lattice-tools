@@ -43,10 +43,11 @@ for each data point}
 \item{...}{Further arguments passed to \code{xyplot}}
 }
 \description{
-This panel function works essentially like a stripplot, but
-instead of randomly scattering a variable produces a regular, grid-like pattern
-of points. Currently only the X variable is transformed. However, X and Y 
-variables can be discretized optionally.
+Panel function for beeswarm plots. This panel function works essentially 
+like a stripplot, but instead of randomly scattering a variable produces 
+a regular, grid-like pattern of points. Currently only the X variable is 
+transformed. Continuously distributed data points can be optionally discretized, 
+both for X and for Y variable.
 }
 \examples{
 
@@ -67,7 +68,6 @@ xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 # for this purpose we can bin the Y variable into groups
 xyplot(Y ~ X, df, groups = X, 
   panel = function(x, y, ...) {
-    panel.xyplot(x, y, col = grey(0.6), ...)
     panel.beeswarm(x, y, bin_y = TRUE, breaks_y = 10, ...)
 })
 

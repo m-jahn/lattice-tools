@@ -1,11 +1,10 @@
 #' Draw pie and ring charts in lattice plots
 #' 
-#' This custom panel function for lattice plots allows to draw
-#' pie charts (or rings) while still being able to use the typical
-#' lattice way of subsetting data. The function can be used
-#' within xyplot() but only one variable needs to be supplied (x).
-#' Grouping is supported in which the x variable is aggregated (summed up) over
-#' each unique group.
+#' This panel function allows to draw pie charts (or rings) while still 
+#' being able to use the typical lattice way of subsetting data. 
+#' The function can be used within `xyplot()` but only one variable needs 
+#' to be supplied (`x`). Grouping is supported in the sense that the `x` 
+#' variable is aggregated (summed up) over each unique group.
 #' 
 #' @importFrom grid grid.polygon
 #' @importFrom grid grid.lines
@@ -15,13 +14,14 @@
 #' @importFrom lattice trellis.par.get
 
 #' @param x (numeric, character) variable to be plotted
-#' @param groups grouping variable passed down from xyplot (does not need to be specified)
-#' @param subscripts subscripts passed down from xyplot (does not need to be specified)
+#' @param groups grouping variable passed down from `xyplot` (does not need to be specified)
+#' @param subscripts subscripts passed down from `xyplot` (does not need to be specified)
 #' @param fun (function) used to perform optional aggregation over groups (default: sum)
 #' @param diameter_inner (numeric) diameter of the inner circle of the pie/ring (default: 0.1)
 #' @param diameter_sector (numeric) diameter of the outer circle of the pie/ring (default: 0.2)
-#' @param clockwise not impemented yet
-#' @param start_angle not impemented yet
+#' @param clockwise not implemented yet
+#' @param start_angle not implemented yet
+#' @param draw_labels (logical) switch drawing of labels on or off (default: TRUE)
 #' @param col,border,lty,lwd,cex (character, numeric) graphical parameters
 #' @param ... other arguments passed to the function
 #' 
@@ -34,7 +34,7 @@
 #' # A simple example using lattice paneling
 #' xyplot( ~ Rate | Sex, USMortality,
 #'   main = "US mortality rates by sex",
-#'   scales = list(draw = FALSE),
+#'   scales = list(draw = FALSE), cex = 0.7,
 #'   panel = function(x, ...) {
 #'     panel.piechart(x, ...)
 #'   }
@@ -60,6 +60,7 @@ panel.piechart <- function(
   fun = function(x) sum(x, na.rm = TRUE),
   diameter_inner = 0.1, diameter_sector = 0.2,
   clockwise = FALSE, start_angle = if (clockwise) 90 else 0,
+  draw_labels = TRUE,
   col = NULL, border = NULL, lty = NULL, 
   lwd = NULL, cex = NULL, ...)
 { 
@@ -133,6 +134,7 @@ panel.piechart <- function(
       upper_bound = upper_bound[[i]],
       diameter_inner = diameter_inner,
       diameter_sector = diameter_sector,
+      draw_labels = draw_labels,
       label = labels[i],
       col = col[i], border = border[i], 
       lty = lty[i], lwd = lwd[i], cex = cex

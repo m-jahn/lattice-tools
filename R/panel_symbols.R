@@ -1,8 +1,8 @@
 #' Plot a grouping variable encoded by symbols
 #'
-#' Custom lattice panel function to plot one more grouping variable encoded 
-#' by symbols ('pch'), instead of just the default encoded by color. Inspired by
-#' \code{panel.bubbleplot} from package \code{tactile}.
+#' This panel function allows to plot one additional grouping variable encoded
+#' by symbols ('pch') instead of just the default grouping by color.
+#' Inspired by `panel.bubbleplot` from package `tactile`.
 #'
 #' @param x,y (numeric) variables to be plotted
 #' @param z (numeric, factor, character) variable encoding symbols. In not numeric, 

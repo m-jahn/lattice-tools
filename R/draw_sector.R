@@ -9,7 +9,7 @@
 draw_sector <- function(
   lower_bound, upper_bound,
   diameter_inner, diameter_sector,
-  label, col, border, lty, lwd, cex
+  label, draw_labels, col, border, lty, lwd, cex
 ) {
   # compute_sector from lower and upper bounds and diameter arguments
   segment <- c(lower_bound, upper_bound) * 2 * pi
@@ -25,25 +25,27 @@ draw_sector <- function(
     gp = grid::gpar(fill = col, col = border, lty = lty, lwd = lwd)
   )
   
-  # draw sector labels 
-  sinz <- sin(median(z))
-  cosz <- cos(median(z))
-  
-  # draw label lines
-  grid::grid.lines(
-    x = c(diam * cosz, (diam+0.1) * cosz)+0.5,
-    y = c(diam * sinz, (diam+0.1) * sinz)+0.5,
-    default.units = "native",
-    gp = grid::gpar(col = border, lwd = lwd, lty = lty)
-  )
-  
-  #draw label text
-  grid::grid.text(
-   label = label,
-   x = ((diam+0.13) * cosz)+0.5,
-   y = ((diam+0.13) * sinz)+0.5,
-   just = "center",
-   default.units = "native",
-   gp = grid::gpar(cex = cex, col = border)
-  )
+  # draw sector labels
+  if (draw_labels) {
+    sinz <- sin(median(z))
+    cosz <- cos(median(z))
+    
+    # draw label lines
+    grid::grid.lines(
+      x = c(diam * cosz, (diam+0.1) * cosz)+0.5,
+      y = c(diam * sinz, (diam+0.1) * sinz)+0.5,
+      default.units = "native",
+      gp = grid::gpar(col = border, lwd = lwd, lty = lty)
+    )
+    
+    #draw label text
+    grid::grid.text(
+      label = label,
+      x = ((diam+0.13) * cosz)+0.5,
+      y = ((diam+0.13) * sinz)+0.5,
+      just = ifelse(cosz > 0, 0, 1),
+      default.units = "native",
+      gp = grid::gpar(cex = cex, col = border)
+    )
+  }
 }

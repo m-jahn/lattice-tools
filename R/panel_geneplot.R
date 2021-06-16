@@ -1,8 +1,8 @@
 #' Plot genes along a linear axis
 #'
-#' Custom lattice panel function to draw genes with start and
-#' end coordinates as main input. Optional vectors for gene_name or gene_strand
-#' must have same length as x,y. Panel function supports paneling and grouping 
+#' This panel function allows to draw genes with start and end coordinates 
+#' as main input. Optional vectors for `gene_name` or `gene_strand` must have 
+#' same length as `x`, `y`. This function supports paneling and grouping 
 #' (e.g. by gene functional category) just as regular panel functions.
 #'
 #' @param x,y (numeric) start and end positions e.g. in bp, respectively

@@ -9,9 +9,8 @@ set.seed(123)
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
 library(lattice)
 
-xyplot(1:3 ~ 4:6, col = grey(0.7),
+xyplot(1:3 ~ 4:6, col = "#0080ff",
   panel = function(x, y, ...) {
-    panel.xyplot(x, y, ...)
     panel.arrowbox(x0 = c(4, 5), y0 = c(2.5, 1),
       x1 = c(5, 6), y1 = c(3, 1.5),
       direction = c(1, -1), ...)
@@ -46,9 +45,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
   groups = gear, lwd = 2, auto.key = list(columns = 3),
   panel = function(x, y, ...) {
-    panel.barplot(x, y, beside = TRUE, ...)
-    panel.stripplot(x, y, jitter.data = TRUE,
-      horizontal = FALSE, amount = 0.15, ...)
+    panel.barplot(x, y, beside = TRUE, draw_points = TRUE, ...)
   }
 )
 
@@ -61,7 +58,7 @@ mtcars_means <- data.frame(
   stdev = with(mtcars, tapply(mpg, cyl, sd))
 )
 
-# you might have to adjust the yscale as it is determined from the
+# you might have to adjust the y-scale as it is determined from the
 # range of the y variable only, ignoring the extension through error bars.
 xyplot(mpg ~ factor(cyl), mtcars_means,
   error_margin = mtcars_means$stdev,
@@ -79,6 +76,7 @@ df <- data.frame(
   X = factor(rep(1:3, each = 20))
 )
 
+# beeswarm plot
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 
 # but with continuous Y variable, it doesn't work as expected
@@ -88,7 +86,6 @@ xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 # for this purpose we can bin the Y variable into groups
 xyplot(Y ~ X, df, groups = X, 
   panel = function(x, y, ...) {
-    panel.xyplot(x, y, col = grey(0.6), ...)
     panel.beeswarm(x, y, bin_y = TRUE, breaks_y = 10, ...)
 })
 
@@ -124,7 +121,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 # use of subscripts
 xyplot(mpg ~ wt | factor(cyl), mtcars,
   pch = 19, labels = mtcars$car,
-  as.table = TRUE, layout = c(3, 1),
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
   panel = function(x, y, subscripts, ...) {
     panel.xyplot(x, y, ...)
     panel.directlabel(x, y, subscripts = subscripts, 
@@ -165,14 +162,10 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 
 # we can also use different variables for the x var, grouping,
-# and paneling. As a visual control that error bars are drawn 
-# for the correct groups we overlay the single data points. 
+# and paneling.
 xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
   groups = gear, lwd = 2, pch = 19, cex = 1.5,
-  auto.key = list(columns = 3),
   panel = function(x, y, ...) {
-    panel.stripplot(x, y, jitter.data = TRUE, 
-      horizontal = FALSE, amount = 0.15, alpha = 0.3, ...)
     panel.errbars(x, y, beside = TRUE, ...)
   }
 )
@@ -241,20 +234,21 @@ xyplot(gene_end ~ gene_start, genes,
 library(lattice)
 data(mtcars)
 
-# Two examples for a custom lattice key
-# inside a panel. The first with taking all arguments from the 
-# top-level plotting function, the second with custom arguments.
+# Two examples for a custom lattice key inside a panel.
+# The first takes all arguments from the 
+# top-level plotting function.
+# The second has custom arguments.
 xyplot(mpg ~ 1/wt | factor(vs), mtcars,
-  groups = carb, pch = 19, cex = 1,
+  groups = carb, pch = 19,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
     panel.key(...)
     panel.key(labels = letters[1:5], which.panel = 2, 
-      corner = c(0.9, 0.1), col = 1:5, pch = 3, cex = 1)
+      corner = c(0.9, 0.1), col = 1:5, pch = 1:5)
   }
 )
 
-## ---- fig.height = 3, fig.width = 5-------------------------------------------
+## ---- fig.height = 3.5, fig.width = 5.5---------------------------------------
 library(grid)
 library(lattice)
 
@@ -263,7 +257,7 @@ data("USMortality")
 # A simple example using lattice paneling
 xyplot( ~ Rate | Sex, USMortality,
   main = "US mortality rates by sex",
-  scales = list(draw = FALSE),
+  scales = list(draw = FALSE), cex = 0.7,
   panel = function(x, ...) {
     panel.piechart(x, ...)
   }
@@ -283,16 +277,18 @@ xyplot( ~ Rate | Sex, USMortality,
   }
 )
 
-## ---- fig.height = 3, fig.width = 5-------------------------------------------
+## ---- fig.height = 4, fig.width = 5-------------------------------------------
 library(lattice)
 data(mtcars)
 
-# p-values are calculated between groups of x, grouping variable is ignored
-xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
+# p-values are calculated between groups of x, grouping is ignored
+xyplot(mpg ~ factor(cyl), mtcars, groups = cyl,
+  pch = 19, cex = 0.8, ylim = c(8, 40),
   panel = function(x, y, ...) {
     panel.stripplot(x, y, jitter.data = TRUE, 
       horizontal = FALSE, amount = 0.15, ...)
-    panel.pvalue(x, y, std = 1, symbol = TRUE, pvalue = TRUE)
+    panel.pvalue(x, y, symbol = TRUE, pvalue = TRUE,
+      offset = 1, verbose = TRUE)
 })
 
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------

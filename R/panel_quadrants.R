@@ -1,8 +1,7 @@
 #' Draw quadrants and quadrant statistics in lattice plots
 #' 
-#' This custom panel function for lattice plots allows to draw
-#' custom quadrants and display additional quadrant statistics
-#' as often used in biomedial sciences. Groups are ignored.
+#' This panel function allows to draw custom quadrants and display additional
+#' quadrant statistics as often used in biomedical sciences. Grouping is ignored.
 #' 
 #' @importFrom stats t.test
 #' 

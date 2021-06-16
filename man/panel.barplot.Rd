@@ -57,10 +57,10 @@ The default, NULL, uses colors supplied by the top level function.}
 \item{...}{other arguments passed to the function}
 }
 \description{
-This custom panel function for lattice plots allows to draw
-barplots with error bars for arbitrary groups of data points.
-Error bars will be drawn for groups of identical x values with
-optional subsetting by grouping or paneling variables.
+This panel function allows to draw barplots with error bars for arbitrary 
+groups of data points. Error bars will be drawn for groups of identical `x`
+values with optional subsetting by grouping or paneling variables. This 
+function is very similar to `panel.errbars` only with bars instead of points.
 }
 \examples{
 library(lattice)
@@ -103,7 +103,7 @@ mtcars_means <- data.frame(
   stdev = with(mtcars, tapply(mpg, cyl, sd))
 )
 
-# you might have to adjust the yscale as it is determined from the
+# you might have to adjust the y-scale as it is determined from the
 # range of the y variable only, ignoring the extension through error bars.
 xyplot(mpg ~ factor(cyl), mtcars_means,
   error_margin = mtcars_means$stdev,

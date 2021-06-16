@@ -52,7 +52,7 @@ number of ticks and tick labels to draw at axes}
 \item{cex}{(numeric) character size of the symbol}
 }
 \description{
-Custom wrapper function around lattice `splom` with different upper and lower panel.
+A wrapper function around lattice `splom` with different upper and lower panels.
 A scatterplot matrix is a tiled plot where all variables of a data frame are plotted against each other.
 }
 \examples{

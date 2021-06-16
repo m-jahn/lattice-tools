@@ -44,24 +44,24 @@ in Normalised Parent Coordinates (0 to 1)}
 \item{...}{other arguments passed to the function}
 }
 \description{
-This custom panel function for lattice plots allows to draw
-a key (legend) inside a lattice panel, with more customization
-options than the lattice default.
+This panel function allows to draw a key (legend) inside a lattice panel, 
+with more customization options than the lattice default.
 }
 \examples{
 library(lattice)
 data(mtcars)
 
-# Two examples for a custom lattice key
-# inside a panel. The first with taking all arguments from the 
-# top-level plotting function, the second with custom but nonsensical arguments.
+# Two examples for a custom lattice key inside a panel.
+# The first takes all arguments from the 
+# top-level plotting function.
+# The second has custom arguments.
 xyplot(mpg ~ 1/wt | factor(vs), mtcars,
-  groups = carb, pch = 19, cex = 1,
+  groups = carb, pch = 19,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
     panel.key(...)
     panel.key(labels = letters[1:5], which.panel = 2, 
-      corner = c(0.9, 0.1), col = 1:5, pch = 3, cex = 1)
+      corner = c(0.9, 0.1), col = 1:5, pch = 1:5)
   }
 )
 
