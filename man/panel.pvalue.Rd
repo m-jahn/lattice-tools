@@ -12,7 +12,7 @@ panel.pvalue(
   pvalue = FALSE,
   pval_digits = 2,
   cex = 0.8,
-  offset = 1,
+  offset = NULL,
   fixed_pos = NULL,
   verbose = FALSE,
   alternative = "two.sided",

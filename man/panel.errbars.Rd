@@ -48,9 +48,9 @@ The default, NULL, uses colors supplied by the top level function.}
 \item{...}{other arguments passed to the function}
 }
 \description{
-Draw error bars in lattice plots. This panel function allows to draw 
-symbols with error bars for arbitrary groups of data points. Error bars 
-will be drawn for groups of identical x values with optional subsetting 
+This panel function allows to draw symbols with error bars for
+arbitrary groups of data points. Error bars will be drawn for
+groups of identical x values with optional subsetting 
 by grouping or paneling variables. This function is very similar to 
 `panel.barplot` only with points instead of bars.
 }

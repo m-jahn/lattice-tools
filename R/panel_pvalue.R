@@ -49,7 +49,7 @@
 panel.pvalue <- function(x, y, std = NULL, 
   symbol = TRUE, pvalue = FALSE, 
   pval_digits = 2,
-  cex = 0.8, offset = 1, 
+  cex = 0.8, offset = NULL, 
   fixed_pos = NULL, verbose = FALSE, 
   alternative = "two.sided",
   col = trellis.par.get()$plot.symbol$col, ...
