@@ -44,6 +44,38 @@ These functions extend or simplify the `panel.function` landscape for `lattice`.
 set.seed(123)
 ```
 
+### panel.annotate
+
+Draw summary text labels in lattice plots. This panel function allows to draw text labels such as the mean on arbitrary groups of data points. Text labels will be drawn for groups of identical x values with optional subsetting by grouping or paneling variables. This function complements `panel.errbars()` and `panel.barplot` as it supports drawing labels beside each other for different groups.
+
+```{r, fig.height = 3, fig.width = 5}
+library(lattice)
+library(latticetools)
+data(mtcars)
+
+# annotate mean values
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  lwd = 2, pch = 19, offset = 2, digits = 1,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+    panel.annotate(x, y, ...)
+  }
+)
+
+# works also with grouping variable. Takes the same arguments
+# "beside" and "ewidth" as panel.errbars() and panel.barplot()
+# to plot labels for different groups aside of each other
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  lwd = 2, pch = 19, groups = gear, digits = 1,
+  offset = 3, beside = TRUE,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+    panel.annotate(x, y, ...)
+  }
+)
+```
+
+
 ### panel.arrowbox
 
 Panel function to draw boxes with arrow head from 2 XY coordinates and direction argument. Each argument can be a vector of same length so that multiple arrows can be drawn at once. Is internally used in `panel.geneplot`.
@@ -66,10 +98,6 @@ xyplot(1:3 ~ 4:6, col = "#0080ff",
 Draw a barplot with error bars in lattice plots. This panel function allows to draw barplots with error bars for arbitrary groups of data points. Error bars will be drawn for groups of identical x values with optional subsetting by grouping or paneling variables. This function is very similar to `panel.errbars` only with bars instead of points.
 
 ```{r, fig.height = 3, fig.width = 5}
-library(latticetools)
-library(lattice)
-data(mtcars)
-
 # mean and stdev error bars are drawn for
 # common x values
 xyplot(mpg ~ factor(cyl), mtcars, lwd = 2, 

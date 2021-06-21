@@ -8,6 +8,32 @@ set.seed(123)
 
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
 library(lattice)
+library(latticetools)
+data(mtcars)
+
+# annotate mean values
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  lwd = 2, pch = 19, offset = 2, digits = 1,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+    panel.annotate(x, y, ...)
+  }
+)
+
+# works also with grouping variable. Takes the same arguments
+# "beside" and "ewidth" as panel.errbars() and panel.barplot()
+# to plot labels for different groups aside of each other
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  lwd = 2, pch = 19, groups = gear, digits = 1,
+  offset = 3, beside = TRUE,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+    panel.annotate(x, y, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
 
 xyplot(1:3 ~ 4:6, col = "#0080ff",
   panel = function(x, y, ...) {
@@ -18,10 +44,6 @@ xyplot(1:3 ~ 4:6, col = "#0080ff",
 )
 
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
-library(latticetools)
-library(lattice)
-data(mtcars)
-
 # mean and stdev error bars are drawn for
 # common x values
 xyplot(mpg ~ factor(cyl), mtcars, lwd = 2, 

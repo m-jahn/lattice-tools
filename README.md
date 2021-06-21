@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-06-16
+2021-06-21
 
 <!-- badges start -->
 
@@ -46,6 +46,48 @@ devtools::install_github("https://github.com/m-jahn/lattice-tools")
 These functions extend or simplify the `panel.function` landscape for
 `lattice`.
 
+### panel.annotate
+
+Draw summary text labels in lattice plots. This panel function allows to
+draw text labels such as the mean on arbitrary groups of data points.
+Text labels will be drawn for groups of identical x values with optional
+subsetting by grouping or paneling variables. This function complements
+`panel.errbars()` and `panel.barplot` as it supports drawing labels
+beside each other for different groups.
+
+``` r
+library(lattice)
+library(latticetools)
+data(mtcars)
+
+# annotate mean values
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  lwd = 2, pch = 19, offset = 2, digits = 1,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+    panel.annotate(x, y, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+# works also with grouping variable. Takes the same arguments
+# "beside" and "ewidth" as panel.errbars() and panel.barplot()
+# to plot labels for different groups aside of each other
+xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
+  lwd = 2, pch = 19, groups = gear, digits = 1,
+  offset = 3, beside = TRUE,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+    panel.annotate(x, y, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-3-2.png)<!-- -->
+
 ### panel.arrowbox
 
 Panel function to draw boxes with arrow head from 2 XY coordinates and
@@ -65,7 +107,7 @@ xyplot(1:3 ~ 4:6, col = "#0080ff",
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ### panel.barplot
 
@@ -76,10 +118,6 @@ optional subsetting by grouping or paneling variables. This function is
 very similar to `panel.errbars` only with bars instead of points.
 
 ``` r
-library(latticetools)
-library(lattice)
-data(mtcars)
-
 # mean and stdev error bars are drawn for
 # common x values
 xyplot(mpg ~ factor(cyl), mtcars, lwd = 2, 
@@ -89,7 +127,7 @@ xyplot(mpg ~ factor(cyl), mtcars, lwd = 2,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -102,7 +140,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -116,7 +154,7 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
 
 ``` r
 # alternatively, means and error margins can be supplied directly. 
@@ -140,7 +178,7 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-4-4.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
 
 ### panel.beeswarm
 
@@ -161,7 +199,7 @@ df <- data.frame(
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 # but with continuous Y variable, it doesn't work as expected
@@ -169,7 +207,7 @@ df$Y <- rnorm(60)
 xyplot(Y ~ X, df, groups = X, panel = panel.beeswarm)
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 ``` r
 # for this purpose we can bin the Y variable into groups
@@ -179,7 +217,7 @@ xyplot(Y ~ X, df, groups = X,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
 
 ``` r
 # the breaks for Y bins are computed for each panel independently.
@@ -192,7 +230,7 @@ xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
 
 ### panel.directlabel
 
@@ -225,7 +263,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 ``` r
 # A similar plot but without grouping. This requires explicit
@@ -241,7 +279,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
 
 ``` r
 # An example without panels and more groups
@@ -255,7 +293,7 @@ xyplot(mpg ~ wt, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-6-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
 
 ### panel.errbars
 
@@ -279,7 +317,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -292,7 +330,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -305,7 +343,7 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
 
 ``` r
 # alternatively, means and error margins can be supplied directly. 
@@ -329,7 +367,7 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->
 
 ### panel.geneplot
 
@@ -365,7 +403,7 @@ xyplot(gene_end ~ gene_start, genes,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 # same example with customized arrows
@@ -384,7 +422,7 @@ xyplot(gene_end ~ gene_start, genes,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ### panel.key
 
@@ -411,7 +449,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ### panel.piechart
 
@@ -438,7 +476,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 # A more advanced example using grouping and
@@ -456,7 +494,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
 
 ### panel.pvalue
 
@@ -483,7 +521,7 @@ xyplot(mpg ~ factor(cyl), mtcars, groups = cyl,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
     ##   Var_1 Var_2      p_value     p_value_text p_sig              test x_pos
     ## 1     4     4 1.000000e+00 \np = 1.0x10^+00       t-test, two.sided     1
@@ -516,7 +554,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ### panel.symbols
 
@@ -538,7 +576,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### panel.violinscatter
 
@@ -568,7 +606,7 @@ xyplot(height ~ voice.part, singer, groups = voice.part,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 # same plot but horizontal orientation
@@ -579,7 +617,7 @@ xyplot(voice.part ~ height, singer, groups = voice.part,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
 
 ``` r
 # example with more and non-discrete data points
@@ -595,7 +633,7 @@ xyplot(variable ~ sample, df,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-14-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
 
 ### custom.ggplot
 
@@ -618,7 +656,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -640,7 +678,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -667,7 +705,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -685,7 +723,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -698,4 +736,4 @@ custom_splom(
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
