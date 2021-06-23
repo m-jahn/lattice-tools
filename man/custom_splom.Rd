@@ -24,7 +24,7 @@ custom_splom(
 \arguments{
 \item{df}{(data.frame) data frame whose columns are plotted against each other}
 
-\item{...}{other arguments passed to the function}
+\item{...}{other arguments passed to the `splom` function}
 
 \item{aspect}{(numeric) aspect ratio between height and width, default = 1.}
 
@@ -32,8 +32,7 @@ custom_splom(
 
 \item{col_palette}{(list) list of colors to use for colorRampPalette}
 
-\item{scales}{(numeric or list) only numeric seems to work, than it controls the 
-number of ticks and tick labels to draw at axes}
+\item{scales}{(numeric) controls the number of ticks and tick labels to draw at axes}
 
 \item{strip}{(list) controlling strip appearance, defaults to NULL.}
 

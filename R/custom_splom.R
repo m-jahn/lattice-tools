@@ -11,8 +11,7 @@
 #' @param aspect (numeric) aspect ratio between height and width, default = 1.
 #' @param between (list) list with two named vectors x and y indicating space between panels
 #' @param col_palette (list) list of colors to use for colorRampPalette
-#' @param scales (numeric or list) only numeric seems to work, than it controls the 
-#'   number of ticks and tick labels to draw at axes
+#' @param scales (numeric) controls the number of ticks and tick labels to draw at axes
 #' @param strip (list) controlling strip appearance, defaults to NULL.
 #' @param groups (character) a grouping variable (untested feature)
 #' @param main (character) title of the plot
@@ -21,7 +20,7 @@
 #' @param pch (numeric) the plotting symbol to be used
 #' @param col (character) the color to be used
 #' @param cex (numeric) character size of the symbol
-#' @param ... other arguments passed to the function
+#' @param ... other arguments passed to the `splom` function
 #' 
 #' @examples
 #' library(lattice)
@@ -67,7 +66,7 @@ custom_splom <- function(df, ...,
       panel.lmline(x, y, fontfamily = "FreeSans")
       cpl <- current.panel.limits()
       panel.text(mean(cpl$xlim), mean(cpl$ylim), round(cor(x, y), 2), font=2)
-    }
+    }, ...
   )
   
 }
