@@ -270,6 +270,28 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
   }
 )
 
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+mtcars$car <- rownames(mtcars)
+
+xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
+  pch = 19, xlab = "", lwd = 2,
+  scales = list(x = list(rot = 35)),
+  panel = function(x, y, ...) {
+    panel.lollipop(x, y, ...)
+  }
+)
+
+# with grouping, and lollipops hanging from top
+xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
+  groups = gear, pch = 19, xlab = "", lwd = 2,
+  scales = list(x = list(rot = 35)),
+  panel = function(x, y, ...) {
+    panel.lollipop(x, y, origin = "top", ...)
+  }
+)
+
 ## ---- fig.height = 3.5, fig.width = 5.5---------------------------------------
 library(grid)
 library(lattice)

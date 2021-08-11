@@ -353,6 +353,34 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
+### panel.lollipop
+
+Make a lollipop chart. This panel function creates lollipop charts. A lollipo chart is simply an XY-plot where the single points are supported by a horizontal or vertical line originating from one of the axes, or a specified threshold.
+
+```{r, fig.height = 3, fig.width = 5}
+library(lattice)
+data(mtcars)
+mtcars$car <- rownames(mtcars)
+
+xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
+  pch = 19, xlab = "", lwd = 2,
+  scales = list(x = list(rot = 35)),
+  panel = function(x, y, ...) {
+    panel.lollipop(x, y, ...)
+  }
+)
+
+# with grouping, and lollipops hanging from top
+xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
+  groups = gear, pch = 19, xlab = "", lwd = 2,
+  scales = list(x = list(rot = 35)),
+  panel = function(x, y, ...) {
+    panel.lollipop(x, y, origin = "top", ...)
+  }
+)
+```
+
+
 ### panel.piechart
 
 Draw pie and ring charts in lattice plots. This panel function allows to draw pie charts (or rings) while still being able to use the typical lattice way of subsetting data. The function can be used within `xyplot()` but only one variable needs to be supplied (`x`). Grouping is supported in the sense that the `x` variable is aggregated (summed up) over each unique group.

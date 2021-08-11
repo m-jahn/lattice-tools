@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-06-21
+2021-08-11
 
 <!-- badges start -->
 
@@ -451,6 +451,42 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 
 ![](vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
+### panel.lollipop
+
+Make a lollipop chart. This panel function creates lollipop charts. A
+lollipo chart is simply an XY-plot where the single points are supported
+by a horizontal or vertical line originating from one of the axes, or a
+specified threshold.
+
+``` r
+library(lattice)
+data(mtcars)
+mtcars$car <- rownames(mtcars)
+
+xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
+  pch = 19, xlab = "", lwd = 2,
+  scales = list(x = list(rot = 35)),
+  panel = function(x, y, ...) {
+    panel.lollipop(x, y, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+# with grouping, and lollipops hanging from top
+xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
+  groups = gear, pch = 19, xlab = "", lwd = 2,
+  scales = list(x = list(rot = 35)),
+  panel = function(x, y, ...) {
+    panel.lollipop(x, y, origin = "top", ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
 ### panel.piechart
 
 Draw pie and ring charts in lattice plots. This panel function allows to
@@ -476,7 +512,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 # A more advanced example using grouping and
@@ -494,7 +530,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ### panel.pvalue
 
@@ -521,7 +557,7 @@ xyplot(mpg ~ factor(cyl), mtcars, groups = cyl,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
     ##   Var_1 Var_2      p_value     p_value_text p_sig              test x_pos
     ## 1     4     4 1.000000e+00 \np = 1.0x10^+00       t-test, two.sided     1
@@ -554,7 +590,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
 ### panel.symbols
 
@@ -576,7 +612,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ### panel.violinscatter
 
@@ -606,7 +642,7 @@ xyplot(height ~ voice.part, singer, groups = voice.part,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
 # same plot but horizontal orientation
@@ -617,7 +653,7 @@ xyplot(voice.part ~ height, singer, groups = voice.part,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
 
 ``` r
 # example with more and non-discrete data points
@@ -633,7 +669,7 @@ xyplot(variable ~ sample, df,
 })
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
 
 ### custom.ggplot
 
@@ -656,7 +692,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -678,7 +714,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -705,7 +741,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -723,7 +759,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -736,4 +772,4 @@ custom_splom(
 )
 ```
 
-![](vignettes/README_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
+![](vignettes/README_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
