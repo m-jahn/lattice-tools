@@ -2,7 +2,10 @@
 #' 
 #' This panel function allows to overlay p-values obtained from a statistical
 #' significance test on plots, together with "significance" symbols such 
-#' as stars as it is often in encountered in the scientific literature.
+#' as stars as it is often in encountered in the scientific literature. It supports
+#' Student's t-test and Wilcoxon rank sum test (also called Mann-Whitney U-test
+#' for two-sample comparisons). The Wilcoxon test is used for non-parametric (non
+#' normally distributed data). Different input options for the tests can be specified.
 #' 
 #' @import grid
 #' @import lattice
@@ -11,12 +14,20 @@
 #' @importFrom methods new
 #' 
 #' @param x,y (numeric, character) variables to be plotted. The x variable 
-#'   is treated as a grouping varibale, i.e. p-values are calculated between groups
+#'   is treated as a grouping variable, i.e. p-values are calculated between groups
 #'   of unique x values.
+#' @param method (character) "t.test" for Student's t-test, or "wilcox.test" for Wilcoxon
+#'   ranked sum test. The latter is also called Mann-Whitney U-test for two-sample comparisons (the default).
+#' @param alternative (character) passed to t.test(), one of "two.sided", "less", or "greater"
+#' @param paired (logical) if the different groups of y values are paired (default: FALSE)
+#' @param two_sample (logical) if TRUE a two-sample is made, else a one-sample comparison (default: TRUE)
+#' @param mu (numeric) a number indicating the true value of the mean (or difference in 
+#'   means if you are performing a two sample test). Passed to the test indicated by 'method'
 #' @param std (character, numeric) the value of x that is used as standard. If NULL, the 
 #'   first value is used as standard. If a numeric scalar i, std is determined 
-#'   as the i'th element of unique(x). If character, it must be one of x. If 
-#'   std = 'all_values', each unique group of x is compared to the total population
+#'   as the i'th element of unique(x). If character, it must match one of x. If 
+#'   std = 'all_values', each unique group of x is compared to the total population.
+#'   Ignored for one sample tests, that are compared against 'mu'
 #' @param symbol (logical) if '*' symbols should be drawn for significance
 #' @param pvalue (logical) if numeric p-values should be drawn for significance
 #' @param pval_digits (numeric) how many p-value digits should be printed (default is 2)
@@ -28,7 +39,6 @@
 #'   if NULL determined from the data (the default)
 #' @param verbose (logical) if a summary of the p-value calculation should be 
 #'   printed to the terminal
-#' @param alternative (character) Passed to t.test(), one of "two.sided", "less", or "greater"
 #' @param col (character) the color to be used
 #' @param ... other arguments passed to the function
 #' 
@@ -46,12 +56,17 @@
 #' 
 #' @export
 # ------------------------------------------------------------------------------
-panel.pvalue <- function(x, y, std = NULL, 
+panel.pvalue <- function(x, y,
+  method = "t.test",
+  alternative = "two.sided",
+  paired = FALSE,
+  two_sample = TRUE,
+  mu = 0,
+  std = NULL,
   symbol = TRUE, pvalue = FALSE, 
   pval_digits = 2,
   cex = 0.8, offset = NULL, 
   fixed_pos = NULL, verbose = FALSE, 
-  alternative = "two.sided",
   col = trellis.par.get()$plot.symbol$col, ...
   )
 { 
@@ -60,24 +75,47 @@ panel.pvalue <- function(x, y, std = NULL,
     ord <- order(as.numeric(x))
     x <- x[ord]; y <- y[ord]
   }
-
-  # if no standard is passed to function, just take the first unique x
-  if (is.null(std)) {
-    std <- 1
-  } else if (is.numeric(std)) {
-    stopifnot(std %in% seq_along(unique(x)))
-  } else if (std == "all_values") {
-    std <- seq_along(unique(x))
-  } else if (is.character(std)) {
-    stopifnot(std %in% x)
-    std <- which(unique(x) %in% std) 
-  }
-  std_val <- unique(x)[std]
   
-  # calculate p-value between all x-variable groups and standard
-  pval <- tapply(y, x, function(z) {
-    t.test(z, y[x == std_val], alternative = alternative)$p.value
-  })
+  # two-sample test
+  # ---------------
+  if (two_sample) {
+    # if no standard is passed to function, just take the first unique x
+    if (is.null(std)) {
+      std <- 1
+    } else if (is.numeric(std)) {
+      stopifnot(std %in% seq_along(unique(x)))
+    } else if (std == "all_values") {
+      std <- seq_along(unique(x))
+    } else if (is.character(std)) {
+      stopifnot(std %in% x)
+      std <- which(unique(x) %in% std) 
+    }
+    std_val <- unique(x)[std]
+    
+    # calculate p-value between all x-variable groups and standard
+    pval <- tapply(y, x, function(y_test) {
+      result <- do.call(method, list(
+        x = y_test, y = y[x == std_val], 
+        alternative = alternative, 
+        paired = paired,
+        mu = mu)
+      )
+      result$p.value
+    })
+  } else {
+  # one-sample test
+  # ---------------
+    # calculate p-value between all x-variable groups and mu
+    std_val = "not applicable"
+    pval <- tapply(y, x, function(y_test) {
+      result <- do.call(method, list(
+        x = y_test, alternative = alternative, 
+        paired = paired,
+        mu = mu)
+      )
+      result$p.value
+    })
+  }
   
   # construct and print p-value symbols
   pval_symbol <- sapply(pval, function(x) {
@@ -94,7 +132,9 @@ panel.pvalue <- function(x, y, std = NULL,
     p_value = pval,
     p_value_text = paste0("\np = ", gsub("e", "x10^", format(pval, nsmall = 3, digits = pval_digits))),
     p_sig = pval_symbol,
-    test = rep(paste("t-test,", alternative), length(unique(x)))
+    test = rep(paste0(method, ", ", alternative), length(unique(x))),
+    two_sample = two_sample,
+    paired = paired
   )
   
   # determine offset for X and Y position

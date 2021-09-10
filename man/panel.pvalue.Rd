@@ -7,6 +7,11 @@
 panel.pvalue(
   x,
   y,
+  method = "t.test",
+  alternative = "two.sided",
+  paired = FALSE,
+  two_sample = TRUE,
+  mu = 0,
   std = NULL,
   symbol = TRUE,
   pvalue = FALSE,
@@ -15,20 +20,32 @@ panel.pvalue(
   offset = NULL,
   fixed_pos = NULL,
   verbose = FALSE,
-  alternative = "two.sided",
   col = trellis.par.get()$plot.symbol$col,
   ...
 )
 }
 \arguments{
 \item{x, y}{(numeric, character) variables to be plotted. The x variable 
-is treated as a grouping varibale, i.e. p-values are calculated between groups
+is treated as a grouping variable, i.e. p-values are calculated between groups
 of unique x values.}
+
+\item{method}{(character) "t.test" for Student's t-test, or "wilcox.test" for Wilcoxon
+ranked sum test. The latter is also called Mann-Whitney U-test for two-sample comparisons (the default).}
+
+\item{alternative}{(character) passed to t.test(), one of "two.sided", "less", or "greater"}
+
+\item{paired}{(logical) if the different groups of y values are paired (default: FALSE)}
+
+\item{two_sample}{(logical) if TRUE a two-sample is made, else a one-sample comparison (default: TRUE)}
+
+\item{mu}{(numeric) a number indicating the true value of the mean (or difference in 
+means if you are performing a two sample test). Passed to the test indicated by 'method'}
 
 \item{std}{(character, numeric) the value of x that is used as standard. If NULL, the 
 first value is used as standard. If a numeric scalar i, std is determined 
-as the i'th element of unique(x). If character, it must be one of x. If 
-std = 'all_values', each unique group of x is compared to the total population}
+as the i'th element of unique(x). If character, it must match one of x. If 
+std = 'all_values', each unique group of x is compared to the total population.
+Ignored for one sample tests, that are compared against 'mu'}
 
 \item{symbol}{(logical) if '*' symbols should be drawn for significance}
 
@@ -48,8 +65,6 @@ if NULL determined from the data (the default)}
 \item{verbose}{(logical) if a summary of the p-value calculation should be 
 printed to the terminal}
 
-\item{alternative}{(character) Passed to t.test(), one of "two.sided", "less", or "greater"}
-
 \item{col}{(character) the color to be used}
 
 \item{...}{other arguments passed to the function}
@@ -57,7 +72,10 @@ printed to the terminal}
 \description{
 This panel function allows to overlay p-values obtained from a statistical
 significance test on plots, together with "significance" symbols such 
-as stars as it is often in encountered in the scientific literature.
+as stars as it is often in encountered in the scientific literature. It supports
+Student's t-test and Wilcoxon rank sum test (also called Mann-Whitney U-test
+for two-sample comparisons). The Wilcoxon test is used for non-parametric (non
+normally distributed data). Different input options for the tests can be specified.
 }
 \examples{
 library(lattice)
