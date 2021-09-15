@@ -19,6 +19,7 @@ panel.key(
   lwd = trellis.par.get()$superpose.line$lwd[1],
   lty = trellis.par.get()$superpose.line$lty[1],
   corner = c(0.1, 0.9),
+  background = NA,
   ...
 )
 }
@@ -40,6 +41,8 @@ and symbols}
 
 \item{corner}{(numeric) vector of length 2 indicating the position of the key,
 in Normalised Parent Coordinates (0 to 1)}
+
+\item{background}{(character) color used to draw a background behind the key (default: NA)}
 
 \item{...}{other arguments passed to the function}
 }

@@ -11,6 +11,7 @@
 #' @param rectangles (logical) if rectangles should be drawn
 #' @param corner (numeric) vector of length 2 indicating the position of the key,
 #'   in Normalised Parent Coordinates (0 to 1)
+#' @param background (character) color used to draw a background behind the key (default: NA)
 #' @param col,lwd,lty,pch,cex,alpha,point.cex graphical parameters to draw key labels
 #'   and symbols
 #' @param ... other arguments passed to the function
@@ -45,7 +46,8 @@ panel.key <- function (
   col = NULL,
   lwd = trellis.par.get()$superpose.line$lwd[1],
   lty = trellis.par.get()$superpose.line$lty[1],
-  corner = c(0.1, 0.9), ...)
+  corner = c(0.1, 0.9),
+  background = NA, ...)
 {
   # define colors
   if (is.null(col)) {
@@ -73,7 +75,8 @@ panel.key <- function (
   
   if (panel.number() %in% which.panel) {
     
-    key <- simpleKey(labels, points = points, lines = lines, rectangles = rectangles, ...)
+    key <- simpleKey(labels, points = points, lines = lines, 
+      rectangles = rectangles, background = background, ...)
     key$text$alpha <- alpha
     key$text$col <- col
     key$text$cex <- cex
