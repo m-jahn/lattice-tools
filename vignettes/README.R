@@ -165,6 +165,28 @@ xyplot(mpg ~ wt, mtcars,
 library(lattice)
 data(mtcars)
 
+# vertical dumbbells
+xyplot(mpg ~ factor(gear), mtcars,
+  groups = gear,
+  pch = 19, lwd = 2,
+  panel = function(x, y, ...) {
+    panel.dumbbell(x, y, ...)
+  }
+)
+
+# horizontal dumbbells
+xyplot(factor(gear) ~ mpg, mtcars,
+  groups = gear,
+  pch = 19, lwd = 4, cex = 4,
+  panel = function(x, y, ...) {
+    panel.dumbbell(x, y, ...)
+  }
+)
+
+## ---- fig.height = 3, fig.width = 5-------------------------------------------
+library(lattice)
+data(mtcars)
+
 # mean and stdev error bars are drawn for
 # common x values
 xyplot(mpg ~ factor(cyl), mtcars, 

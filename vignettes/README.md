@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-08-11
+2021-09-20
 
 <!-- badges start -->
 
@@ -295,6 +295,43 @@ xyplot(mpg ~ wt, mtcars,
 
 ![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->
 
+### panel.dumbbell
+
+Make a dumbbell chart. Similar to a lollipop chart that shows a single
+point supported by a horizontal or vertical line, the dumbbell chart
+shows the minimum and maximum of a distribution connected by a line. The
+direction of the dumbbell (i.e. vertical or horizontal) can be specified
+manually, or it is determined from the data automatically (the default).
+
+``` r
+library(lattice)
+data(mtcars)
+
+# vertical dumbbells
+xyplot(mpg ~ factor(gear), mtcars,
+  groups = gear,
+  pch = 19, lwd = 2,
+  panel = function(x, y, ...) {
+    panel.dumbbell(x, y, ...)
+  }
+)
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+# horizontal dumbbells
+xyplot(factor(gear) ~ mpg, mtcars,
+  groups = gear,
+  pch = 19, lwd = 4, cex = 4,
+  panel = function(x, y, ...) {
+    panel.dumbbell(x, y, ...)
+  }
+)
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+
 ### panel.errbars
 
 Draw error bars in lattice plots. This panel function allows to draw
@@ -317,7 +354,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 # using the same variable for x and grouping will
@@ -330,7 +367,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 ``` r
 # we can also use different variables for the x var, grouping,
@@ -343,7 +380,7 @@ xyplot(mpg ~ factor(cyl) | factor(vs), mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-9-3.png)<!-- -->
 
 ``` r
 # alternatively, means and error margins can be supplied directly. 
@@ -367,7 +404,7 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-8-4.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-9-4.png)<!-- -->
 
 ### panel.geneplot
 
@@ -403,7 +440,7 @@ xyplot(gene_end ~ gene_start, genes,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 # same example with customized arrows
@@ -422,7 +459,7 @@ xyplot(gene_end ~ gene_start, genes,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
 
 ### panel.key
 
@@ -449,7 +486,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ### panel.lollipop
 
@@ -472,7 +509,7 @@ xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 # with grouping, and lollipops hanging from top
@@ -485,7 +522,7 @@ xyplot(mpg ~ factor(car, car[order(mpg)]), mtcars[1:10, ],
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
 
 ### panel.piechart
 
@@ -512,7 +549,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 # A more advanced example using grouping and
@@ -530,7 +567,7 @@ xyplot( ~ Rate | Sex, USMortality,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
 
 ### panel.pvalue
 
@@ -557,16 +594,16 @@ xyplot(mpg ~ factor(cyl), mtcars, groups = cyl,
 })
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
 
-    ##   Var_1 Var_2      p_value     p_value_text p_sig              test x_pos
-    ## 1     4     4 1.000000e+00 \np = 1.0x10^+00       t-test, two.sided     1
-    ## 2     4     6 4.048495e-04 \np = 4.0x10^-04   *** t-test, two.sided     2
-    ## 3     4     8 1.641348e-06 \np = 1.6x10^-06   *** t-test, two.sided     3
-    ##      y_pos
-    ## 1 34.90000
-    ## 2 29.53333
-    ## 3 26.60000
+    ##   Var_1 Var_2      p_value     p_value_text p_sig              test two_sample
+    ## 1     4     4 1.000000e+00 \np = 1.0x10^+00       t.test, two.sided       TRUE
+    ## 2     4     6 4.048495e-04 \np = 4.0x10^-04   *** t.test, two.sided       TRUE
+    ## 3     4     8 1.641348e-06 \np = 1.6x10^-06   *** t.test, two.sided       TRUE
+    ##   paired x_pos    y_pos
+    ## 1  FALSE     1 34.90000
+    ## 2  FALSE     2 29.53333
+    ## 3  FALSE     3 26.60000
 
 ### panel.quadrants
 
@@ -590,7 +627,7 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ### panel.symbols
 
@@ -612,7 +649,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 ### panel.violinscatter
 
@@ -642,7 +679,7 @@ xyplot(height ~ voice.part, singer, groups = voice.part,
 })
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 # same plot but horizontal orientation
@@ -653,7 +690,7 @@ xyplot(voice.part ~ height, singer, groups = voice.part,
 })
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 ``` r
 # example with more and non-discrete data points
@@ -669,7 +706,7 @@ xyplot(variable ~ sample, df,
 })
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
 
 ### custom.ggplot
 
@@ -692,7 +729,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -714,7 +751,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -741,7 +778,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -759,7 +796,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -772,4 +809,4 @@ custom_splom(
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->

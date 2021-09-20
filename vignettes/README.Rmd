@@ -228,6 +228,35 @@ xyplot(mpg ~ wt, mtcars,
 ```
 
 
+### panel.dumbbell
+
+Make a dumbbell chart. Similar to a lollipop chart that shows a single point supported by a horizontal or vertical line, the dumbbell chart shows the minimum and maximum of a distribution connected by a line. The direction of the dumbbell (i.e. vertical or horizontal) can be specified manually, or it is determined from the data automatically (the default).
+
+```{r, fig.height = 3, fig.width = 5}
+library(lattice)
+data(mtcars)
+
+# vertical dumbbells
+xyplot(mpg ~ factor(gear), mtcars,
+  groups = gear,
+  pch = 19, lwd = 2,
+  panel = function(x, y, ...) {
+    panel.dumbbell(x, y, ...)
+  }
+)
+
+# horizontal dumbbells
+xyplot(factor(gear) ~ mpg, mtcars,
+  groups = gear,
+  pch = 19, lwd = 4, cex = 4,
+  panel = function(x, y, ...) {
+    panel.dumbbell(x, y, ...)
+  }
+)
+```
+
+
+
 ### panel.errbars
 
 Draw error bars in lattice plots. This panel function allows to draw symbols with error bars for arbitrary groups of data points. Error bars will be drawn for groups of identical x values with optional subsetting by grouping or paneling variables. This function is very similar to `panel.barplot` only with points instead of bars.
