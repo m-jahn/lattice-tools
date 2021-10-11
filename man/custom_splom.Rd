@@ -10,7 +10,7 @@ custom_splom(
   aspect = 1,
   between = list(x = 0.5, y = 0.5),
   col_palette = c("steelblue", grey(0.95), "darkorange"),
-  scales = 4,
+  pscales = 4,
   strip = NULL,
   groups = NULL,
   main = NULL,
@@ -32,7 +32,7 @@ custom_splom(
 
 \item{col_palette}{(list) list of colors to use for colorRampPalette}
 
-\item{scales}{(numeric) controls the number of ticks and tick labels to draw at axes}
+\item{pscales}{(numeric) controls the number of ticks and tick labels to draw at axes}
 
 \item{strip}{(list) controlling strip appearance, defaults to NULL.}
 
@@ -66,7 +66,7 @@ custom_splom(mtcars[1:5])
 custom_splom(
   mtcars[1:5],
   col_palette = rainbow(4),
-  scales = 10, 
+  pscales = 10,
   xlab = "data points", ylab = "regression",
   pch = 1, col = 1, cex = 0.6
 )

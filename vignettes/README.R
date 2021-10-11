@@ -471,7 +471,7 @@ custom_splom(mtcars[1:5])
 custom_splom(
   mtcars[1:5],
   col_palette = rainbow(4),
-  scales = 10, 
+  pscales = 10, 
   xlab = "data points", ylab = "regression",
   pch = 1, col = 1, cex = 0.6
 )

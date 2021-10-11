@@ -11,7 +11,7 @@
 #' @param aspect (numeric) aspect ratio between height and width, default = 1.
 #' @param between (list) list with two named vectors x and y indicating space between panels
 #' @param col_palette (list) list of colors to use for colorRampPalette
-#' @param scales (numeric) controls the number of ticks and tick labels to draw at axes
+#' @param pscales (numeric) controls the number of ticks and tick labels to draw at axes
 #' @param strip (list) controlling strip appearance, defaults to NULL.
 #' @param groups (character) a grouping variable (untested feature)
 #' @param main (character) title of the plot
@@ -34,7 +34,7 @@
 #' custom_splom(
 #'   mtcars[1:5],
 #'   col_palette = rainbow(4),
-#'   scales = 10, 
+#'   pscales = 10,
 #'   xlab = "data points", ylab = "regression",
 #'   pch = 1, col = 1, cex = 0.6
 #' )
@@ -44,7 +44,7 @@
 custom_splom <- function(df, ...,
   aspect = 1, between = list(x = 0.5, y = 0.5),
   col_palette = c("steelblue", grey(0.95), "darkorange"),
-  scales = 4, strip = NULL,
+  pscales = 4, strip = NULL,
   groups = NULL, main = NULL,
   xlab = NULL, ylab = NULL,
   pch = 19, col = grey(0.5), cex = 0.8
@@ -53,7 +53,7 @@ custom_splom <- function(df, ...,
   splom(~ df,
     par.settings = custom.lattice,
     aspect = aspect, between = between,
-    pscales = scales, strip = strip,
+    pscales = pscales, strip = strip,
     groups = groups, main = main,
     xlab = xlab, ylab = ylab,
     pch = pch, col = col, cex = cex,
