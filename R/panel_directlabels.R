@@ -1,7 +1,10 @@
-#' Point labels for scatterplots
+#' Point labels for scatterplots (using directlabels)
 #' 
 #' Draw text labels for all points of a scatterplot using internal functionality from the
-#' \code{directlabels} package.
+#' \code{directlabels} package. Note: an alternative panel function, \code{panel.repellabels},
+#' is a wrapper using \code{ggrepel} calculated label positions instead. The same behavior can be
+#' achieved by using "ggrepel" for the \code{positioning} argument.
+#' 
 #' In contrast to the functionality of the original \code{directlabels} package,
 #' every point is labelled instead of groups of points. Labels are also independent from
 #' the grouping variable, so that e.g. colors indicate one grouping variable and 
@@ -17,6 +20,7 @@
 #' @importFrom directlabels apply.method
 #' @importFrom grid convertX
 #' @importFrom grid convertY
+#' @importFrom grid unit
 #' @importFrom stats ave
 #' 
 #' @param x,y (numeric) vectors representing x and y coordinates of points
@@ -33,6 +37,8 @@
 #' @param col (character) color (vector) to be used for labels and lines. 
 #'   The default, NULL, uses colors supplied by the top level function.
 #' @param cex (numeric) size of text labels and corresponding boxes
+#' @param positioning (character) One of "directlabels" (default) or "ggrepel",
+#'   indicating the package used to calculate position of labels and bounding boxes
 #' @param method (list) the positioning method, default is \code{directlabels::smart.grid}
 #' @param draw_text (logical) whether to draw text labels or not (default: TRUE)
 #' @param draw_line (logical) whether to draw a line to labels or not (default: TRUE)
@@ -49,7 +55,6 @@
 #' @examples
 #' library(grid)
 #' library(lattice)
-#' library(directlabels)
 #' 
 #' data("mtcars")
 #' mtcars$car <- rownames(mtcars)
@@ -61,7 +66,7 @@
 #'   as.table = TRUE, layout = c(3, 1), cex = 0.6,
 #'   panel = function(x, y, ...) {
 #'     panel.xyplot(x, y, ...)
-#'     panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+#'     panel.directlabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
 #'   }
 #' )
 #' 
@@ -72,7 +77,7 @@
 #'   as.table = TRUE, layout = c(3, 1), cex = 0.6,
 #'   panel = function(x, y, subscripts, ...) {
 #'     panel.xyplot(x, y, ...)
-#'     panel.directlabel(x, y, subscripts = subscripts, 
+#'     panel.directlabels(x, y, subscripts = subscripts, 
 #'       draw_box = TRUE, box_fill = "white", ...)
 #'   }
 #' )
@@ -83,17 +88,18 @@
 #'   labels = mtcars$wt, cex = 0.6,
 #'   panel = function(x, y, ...) {
 #'     panel.xyplot(x, y, ...)
-#'     panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+#'     panel.directlabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
 #'   }
 #' )
 #' 
 #' @export
 # ------------------------------------------------------------------------------
-panel.directlabel <- function(
+panel.directlabels <- function(
   x, y, groups = NULL, subscripts = NULL,
   labels = NULL, col = NULL, cex = 0.8,
   x_boundary = NULL, y_boundary = NULL,
   selected = NULL,
+  positioning = "directlabels",
   method = directlabels::smart.grid,
   draw_text = TRUE, draw_line = TRUE,
   draw_box = FALSE, box_fill = grey(0.95),
@@ -174,35 +180,26 @@ panel.directlabel <- function(
     }
   })
   
-  # convert user coordinate units to cm (see apply.method manual)
-  x_cm <- grid::convertX(unit(x, "native"), unitTo = "cm", valueOnly = TRUE)
-  y_cm <- grid::convertY(unit(y, "native"), unitTo = "cm", valueOnly = TRUE)
-  
-  # apply label placing algorithm
-  coords <- directlabels::apply.method(
-    method, d = data.frame(
-      x = x_cm, y = y_cm, 
-      x_orig = x_cm, y_orig = y_cm,
-      groups = label_groups,
-      label = labels,
-      cex = rep(cex, length(x)), 
-      index = 1:length(x)
+  # obtain coordinates either using 'directlabels' or 'ggrepel' packages
+  if (positioning == "ggrepel") {
+    coords <- get_repelled_labels(
+      x = x, y = y,
+      labels = labels,
+      cex = cex, point_size = 0.001,
+      box_padding_x = 0.005,
+      box_padding_y = 0.005,
+      point_padding_x = 0.01,
+      point_padding_y = 0.01
     )
-  )
-  
-  # sort not by length of character labels, but by original order
-  coords <- coords[order(coords$index), ]
-  
-  # convert back to native units
-  coords[c("x", "x_orig", "w", "right", "left")] <-
-    apply(coords[c("x", "x_orig", "w", "right", "left")], 2, function(x) {
-      grid::convertX(unit(x, "cm"), unitTo = "native", valueOnly = TRUE)
-    })
-  
-  coords[c("y", "y_orig", "h", "top", "bottom")] <-
-    apply(coords[c("y", "y_orig", "h", "top", "bottom")], 2, function(x) {
-      grid::convertY(unit(x, "cm"), unitTo = "native", valueOnly = TRUE)
-    })
+  } else if (positioning == "directlabels") {
+    coords <- get_direct_labels(
+      x = x, y = y,
+      labels = labels,
+      label_groups = label_groups,
+      cex = cex,
+      method = method, ...
+    )
+  }
   
   # draw label lines
   if (draw_line) {
@@ -231,10 +228,10 @@ panel.directlabel <- function(
     
     with(coords,
       panel.rect(
-        xleft = left + x - x_orig - x_scalebox,
-        ybottom = bottom + y - y_orig - y_scalebox,
-        xright = right + x - x_orig + x_scalebox,
-        ytop = top + y - y_orig + y_scalebox,
+        xleft = x1_box - x_scalebox,
+        ybottom = y1_box - y_scalebox,
+        xright = x2_box + x_scalebox,
+        ytop = y2_box + y_scalebox,
         col = box_fill, border = box_line, ...)
     )
   }

@@ -120,10 +120,9 @@ xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
       breaks_y = seq(-4, 4, length.out = 20), ...)
 })
 
-## ---- fig.height = 4, fig.width = 6-------------------------------------------
+## ---- fig.height = 5, fig.width = 8-------------------------------------------
 library(grid)
 library(lattice)
-library(directlabels)
 
 data("mtcars")
 mtcars$car <- rownames(mtcars)
@@ -135,7 +134,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
   as.table = TRUE, layout = c(3, 1), cex = 0.6,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
-    panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+    panel.directlabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
   }
 )
 
@@ -146,7 +145,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
   as.table = TRUE, layout = c(3, 1), cex = 0.6,
   panel = function(x, y, subscripts, ...) {
     panel.xyplot(x, y, ...)
-    panel.directlabel(x, y, subscripts = subscripts, 
+    panel.directlabels(x, y, subscripts = subscripts, 
       draw_box = TRUE, box_fill = "white", ...)
   }
 )
@@ -157,7 +156,7 @@ xyplot(mpg ~ wt, mtcars,
   labels = mtcars$wt, cex = 0.6,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
-    panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+    panel.directlabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
   }
 )
 
@@ -369,6 +368,46 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
     panel.quadrants(x, y, ...)
+  }
+)
+
+## ---- fig.height = 5.5, fig.width = 9-----------------------------------------
+library(grid)
+library(lattice)
+
+data("mtcars")
+mtcars$car <- rownames(mtcars)
+
+# A standard example using lattice grouping and paneling;
+# We can also draw boxes around labels and change label size
+xyplot(mpg ~ wt | factor(cyl), mtcars,
+  groups = cyl, pch = 19, labels = mtcars$car,
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.repellabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
+  }
+)
+
+# A similar plot with panels, but without grouping.
+# This requires explicit use of subscripts
+xyplot(mpg ~ wt | factor(cyl), mtcars,
+  pch = 19, labels = mtcars$car,
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
+  panel = function(x, y, subscripts, ...) {
+    panel.xyplot(x, y, ...)
+    panel.repellabels(x, y, subscripts = subscripts,
+      draw_box = TRUE, box_fill = "white", ...)
+  }
+)
+
+# An example without panels and more groups
+xyplot(mpg ~ wt, mtcars,
+  groups = hp, pch = 19,
+  labels = mtcars$wt, cex = 0.6,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.repellabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
   }
 )
 

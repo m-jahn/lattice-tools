@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-10-11
+2021-11-09
 
 <!-- badges start -->
 
@@ -232,21 +232,25 @@ xyplot(Y ~ factor(rep(1, length(Y))) | X, df, groups = X,
 
 ![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-6-4.png)<!-- -->
 
-### panel.directlabel
+### panel.directlabels
 
 Point labels for scatterplots. Draw text labels for all points of a
 scatterplot using internal functionality from the `directlabels`
-package. In contrast to the original `directlabels` package, *every
-point* is labeled instead of groups of points. Labels are also
-independent from the grouping variable, so that e.g. colors indicate one
-grouping variable and labels another. By default, labels adapt the
-graphical parameters of the higher level plot, including coloring
-according to groups. However, many parameters can be customized.
+package. Note: an alternative panel function, `panel.repellabels`, is a
+wrapper using ggrepel calculated label positions instead. The same
+behavior can be achieved by using “ggrepel” for the `positioning`
+argument.
+
+In contrast to the original `directlabels` package, *every point* is
+labeled instead of groups of points. Labels are also independent from
+the grouping variable, so that e.g. colors indicate one grouping
+variable and labels another. By default, labels adapt the graphical
+parameters of the higher level plot, including coloring according to
+groups. However, many parameters can be customized.
 
 ``` r
 library(grid)
 library(lattice)
-library(directlabels)
 
 data("mtcars")
 mtcars$car <- rownames(mtcars)
@@ -258,7 +262,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
   as.table = TRUE, layout = c(3, 1), cex = 0.6,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
-    panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+    panel.directlabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
   }
 )
 ```
@@ -273,7 +277,7 @@ xyplot(mpg ~ wt | factor(cyl), mtcars,
   as.table = TRUE, layout = c(3, 1), cex = 0.6,
   panel = function(x, y, subscripts, ...) {
     panel.xyplot(x, y, ...)
-    panel.directlabel(x, y, subscripts = subscripts, 
+    panel.directlabels(x, y, subscripts = subscripts, 
       draw_box = TRUE, box_fill = "white", ...)
   }
 )
@@ -288,7 +292,7 @@ xyplot(mpg ~ wt, mtcars,
   labels = mtcars$wt, cex = 0.6,
   panel = function(x, y, ...) {
     panel.xyplot(x, y, ...)
-    panel.directlabel(x, y, draw_box = TRUE, box_line = TRUE, ...)
+    panel.directlabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
   }
 )
 ```
@@ -629,6 +633,70 @@ xyplot(mpg ~ 1/wt | factor(vs), mtcars,
 
 ![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
+### panel.repellabels
+
+Draw text labels for all points of a scatterplot using internal
+functionality from the `ggrepel` package. Note: an alternative panel
+function, `panel.directlabels`, carries most of the functionality of
+this function, but uses `directlabels` to calculate label positions
+instead. The same behavior can be achieved by using `panel.directlabels`
+with “ggrepel” for the `positioning` argument.
+
+By default, labels adapt the graphical parameters of the higher level
+plot, including coloring according to groups. However, many parameters
+can be customized.
+
+``` r
+library(grid)
+library(lattice)
+
+data("mtcars")
+mtcars$car <- rownames(mtcars)
+
+# A standard example using lattice grouping and paneling;
+# We can also draw boxes around labels and change label size
+xyplot(mpg ~ wt | factor(cyl), mtcars,
+  groups = cyl, pch = 19, labels = mtcars$car,
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.repellabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
+  }
+)
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+``` r
+# A similar plot with panels, but without grouping.
+# This requires explicit use of subscripts
+xyplot(mpg ~ wt | factor(cyl), mtcars,
+  pch = 19, labels = mtcars$car,
+  as.table = TRUE, layout = c(3, 1), cex = 0.6,
+  panel = function(x, y, subscripts, ...) {
+    panel.xyplot(x, y, ...)
+    panel.repellabels(x, y, subscripts = subscripts,
+      draw_box = TRUE, box_fill = "white", ...)
+  }
+)
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+
+``` r
+# An example without panels and more groups
+xyplot(mpg ~ wt, mtcars,
+  groups = hp, pch = 19,
+  labels = mtcars$wt, cex = 0.6,
+  panel = function(x, y, ...) {
+    panel.xyplot(x, y, ...)
+    panel.repellabels(x, y, draw_box = TRUE, box_line = TRUE, ...)
+  }
+)
+```
+
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-3.png)<!-- -->
+
 ### panel.symbols
 
 Plot a grouping variable encoded by symbols. This panel function allows
@@ -649,7 +717,7 @@ xyplot(mpg ~ factor(cyl), mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ### panel.violinscatter
 
@@ -679,7 +747,7 @@ xyplot(height ~ voice.part, singer, groups = voice.part,
 })
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
 
 ``` r
 # same plot but horizontal orientation
@@ -690,7 +758,7 @@ xyplot(voice.part ~ height, singer, groups = voice.part,
 })
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
 
 ``` r
 # example with more and non-discrete data points
@@ -706,7 +774,7 @@ xyplot(variable ~ sample, df,
 })
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-17-3.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
 
 ### custom.ggplot
 
@@ -729,7 +797,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
 
 ### custom.lattice
 
@@ -751,7 +819,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
 
 ### custom.colorblind
 
@@ -778,7 +846,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ### custom\_splom
 
@@ -796,7 +864,7 @@ data(mtcars)
 custom_splom(mtcars[1:5])
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 ``` r
 # We can customize the scatterplot
@@ -809,4 +877,4 @@ custom_splom(
 )
 ```
 
-![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-21-2.png)<!-- -->
+![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-22-2.png)<!-- -->
