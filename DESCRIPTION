@@ -1,12 +1,17 @@
 Package: latticetools
 Title: Panel functions and wrappers that extend the R lattice universe
 Version: 0.1.0
-Authors@R: 
+Authors@R: c(
     person(given = "Michael",
            family = "Jahn",
            role = c("aut", "cre"),
            email = "michael.jahn@scilifelab.se",
-           comment = c(ORCID = "0000-0002-3913-153X"))
+           comment = c(ORCID = "0000-0002-3913-153X")),
+    person(given = "Kamil",
+           family = "Slowikowski",
+           role = c("aut"),
+           email = "kslowikowski@gmail.com",
+           comment = c(ORCID = "0000-0002-2843-6370")))
 Description: Panel functions and wrappers that extend the R lattice universe. Lattice is a general purpose plotting package from Deepayan Sarkar. Lattice's functionality is comparable to the popular ggplot2 package but has a slightly different look and feel.
 License: GPL-3 + file LICENSE
 LinkingTo:
