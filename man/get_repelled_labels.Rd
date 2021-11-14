@@ -2,18 +2,23 @@
 % Please edit documentation in R/get_repelled_labels.R
 \name{get_repelled_labels}
 \alias{get_repelled_labels}
-\title{Get repelled label bounding boxes}
+\title{Get bounding boxes for repelled text labels}
 \usage{
 get_repelled_labels(
   x,
   y,
   labels,
-  cex,
-  point_size,
-  box_padding_x,
-  box_padding_y,
-  point_padding_x,
-  point_padding_y,
+  cex = 1,
+  xlim = c(0, 1),
+  ylim = c(0, 1),
+  point_size = 0.001,
+  box_padding_x = 0.005,
+  box_padding_y = 0.005,
+  point_padding_x = 0.01,
+  point_padding_y = 0.01,
+  force_push = 1e-05,
+  force_pull = 1e-05,
+  transform_coord = "npc",
   ...
 )
 }
@@ -23,6 +28,13 @@ get_repelled_labels(
 \item{labels}{(character) vector of labels}
 
 \item{cex}{(numeric) size of text labels}
+
+\item{xlim}{numeric vector representing the limits on the x axis like
+\code{c(xmin, xmax)}}
+
+\item{ylim}{numeric vector representing the limits on the y axis like
+ \code{c(ymin, ymax)}
+‘force_push’ ‘force_pull’ ‘transform_coord’}
 
 \item{point_size}{(numeric) approximate size of points in npc relative cooordinates. Can be small,
 is used in conjunction with "point_padding" options}
@@ -35,8 +47,59 @@ is used in conjunction with "point_padding" options}
 
 \item{point_padding_y}{(numeric) extra margin around data points}
 
+\item{force_push}{(numeric) magnitude of the push force (defaults to \code{1e-5})}
+
+\item{force_pull}{(numeric) magnitude of the pull force (defaults to \code{1e-5})}
+
+\item{transform_coord}{(character) the coordinate system used for calculating
+bounding boxes. The default, "npc", is to transfrom all cordinates to
+'Normalised Parent Coordinates'. When calling externally, use "native"
+instead, see examples.}
+
 \item{...}{other arguments passed to the function}
 }
 \description{
-The function uses ggrepel to obtaine repelled bounding boxes
+This function uses \code{repel_boxes()} from the 'ggrepel' package to obtain coordinates
+and bounding boxes for repelled text labels. Internally, all units are converted to
+relative plot coordinates ('npc', between 0 and 1) and before evoking the C++ function
+\code{repel_boxes()} to carry out the repelling placement. This function is only intended
+for internal use, but also works for any type of grid or base graphics plot, as long
+as a graphics device is open, see examples.
+}
+\examples{
+data("mtcars")
+mtcars$car <- rownames(mtcars)
+
+# with base graphics
+# ---------------------------
+plot(mtcars$mpg ~ mtcars$wt, pch = 19)
+
+coords <- get_repelled_labels(
+  x = mtcars$wt, y = mtcars$mpg, 
+  labels = mtcars$car,
+  cex = 0.7, point_size = 0.01,
+  xlim = range(mtcars$wt),
+  ylim = range(mtcars$mpg),
+  box_padding_x = 0.05,
+  box_padding_y = 0.05,
+  point_padding_x = 0.01,
+  point_padding_y = 0.2,
+  force_push = 1e-05,
+  force_pull = 1e-05,
+  transform_coord = "native"
+)
+
+with(coords, rect(x1_box, y1_box, x2_box, y2_box, col = "white"))
+with(coords, text(x, y, labels = label, cex = 0.7))
+
+# with ggplot2
+# ---------------------------
+
+\dontrun{
+library(ggplot2)
+ggplot(mtcars, aes(y = mpg, x = wt)) +
+  geom_point() +
+  geom_label(aes(x = coords$x, y = coords$y, label = coords$label))
+}
+
 }

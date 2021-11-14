@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-11-09
+2021-11-14
 
 <!-- badges start -->
 
@@ -775,6 +775,8 @@ xyplot(variable ~ sample, df,
 ```
 
 ![](vignettes/README_files/figure-gfm/unnamed-chunk-18-3.png)<!-- -->
+
+## Other functions
 
 ### custom.ggplot
 

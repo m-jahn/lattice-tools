@@ -587,6 +587,8 @@ xyplot(variable ~ sample, df,
 })
 ```
 
+## Other functions
+
 ### custom.ggplot
 
 Custom `ggplot2` like theme for lattice plots. Graphical parameters are passed
