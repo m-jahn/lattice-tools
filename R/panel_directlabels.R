@@ -220,7 +220,7 @@ panel.directlabels <- function(
     # fraction of current X and Y axis limits
     if (!is.null(box_scale)) {
       x_scalebox <- diff(current.panel.limits()$xlim)*box_scale
-      y_scalebox <- diff(current.panel.limits()$xlim)*box_scale
+      y_scalebox <- diff(current.panel.limits()$ylim)*box_scale
     } else {
       x_scalebox <- 0
       y_scalebox <- 0
