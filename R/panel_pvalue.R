@@ -51,7 +51,8 @@
 #'   panel = function(x, y, ...) {
 #'     panel.stripplot(x, y, jitter.data = TRUE, 
 #'       horizontal = FALSE, amount = 0.15, ...)
-#'     panel.pvalue(x, y, std = 1, symbol = TRUE, pvalue = TRUE)
+#'     panel.pvalue(x, y, std = 1, symbol = TRUE,
+#'       pvalue = TRUE, offset = 6)
 #' })
 #' 
 #' @export
@@ -138,8 +139,9 @@ panel.pvalue <- function(x, y,
   )
   
   # determine offset for X and Y position
+  # the default is to use 10% of the Y-range
   if (is.null(offset)) {
-    offset <- c(0, 0)
+    offset <- c(0, diff(lattice::current.panel.limits()$ylim)*0.1)
   } else if (is.numeric(offset)) {
     if (length(offset) == 1) offset <- c(0, offset) else
     if (length(offset) == 2) offset <- offset
@@ -153,9 +155,7 @@ panel.pvalue <- function(x, y,
   # determine Y position of p-value text
   if (is.null(fixed_pos)) {
     ypos = tapply(y, x, function(z) {
-      s <- max(z, na.rm = TRUE)
-      s <- s+abs(s/3)
-      replace(s, s > max(y), max(y))
+      mean(z, na.rm = TRUE) + sd(z, na.rm = TRUE)
     })
     df_pval$y_pos <- ypos+offset[2]
   } else if (is.numeric(fixed_pos)){

@@ -347,13 +347,12 @@ library(lattice)
 data(mtcars)
 
 # p-values are calculated between groups of x, grouping is ignored
-xyplot(mpg ~ factor(cyl), mtcars, groups = cyl,
-  pch = 19, cex = 0.8, ylim = c(8, 40),
+xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
   panel = function(x, y, ...) {
     panel.stripplot(x, y, jitter.data = TRUE, 
       horizontal = FALSE, amount = 0.15, ...)
-    panel.pvalue(x, y, symbol = TRUE, pvalue = TRUE,
-      offset = 1, verbose = TRUE)
+    panel.pvalue(x, y, std = 1, symbol = TRUE,
+      pvalue = TRUE, offset = 6)
 })
 
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------

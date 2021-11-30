@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-11-14
+2021-11-30
 
 <!-- badges start -->
 
@@ -588,26 +588,16 @@ library(lattice)
 data(mtcars)
 
 # p-values are calculated between groups of x, grouping is ignored
-xyplot(mpg ~ factor(cyl), mtcars, groups = cyl,
-  pch = 19, cex = 0.8, ylim = c(8, 40),
+xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
   panel = function(x, y, ...) {
     panel.stripplot(x, y, jitter.data = TRUE, 
       horizontal = FALSE, amount = 0.15, ...)
-    panel.pvalue(x, y, symbol = TRUE, pvalue = TRUE,
-      offset = 1, verbose = TRUE)
+    panel.pvalue(x, y, std = 1, symbol = TRUE,
+      pvalue = TRUE, offset = 6)
 })
 ```
 
 ![](/home/michael/Documents/SciLifeLab/Resources/R_projects/lattice-tools/vignettes/README_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
-
-    ##   Var_1 Var_2      p_value     p_value_text p_sig              test two_sample
-    ## 1     4     4 1.000000e+00 \np = 1.0x10^+00       t.test, two.sided       TRUE
-    ## 2     4     6 4.048495e-04 \np = 4.0x10^-04   *** t.test, two.sided       TRUE
-    ## 3     4     8 1.641348e-06 \np = 1.6x10^-06   *** t.test, two.sided       TRUE
-    ##   paired x_pos    y_pos
-    ## 1  FALSE     1 34.90000
-    ## 2  FALSE     2 29.53333
-    ## 3  FALSE     3 26.60000
 
 ### panel.quadrants
 

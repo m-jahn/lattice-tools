@@ -86,7 +86,8 @@ xyplot(mpg ~ factor(cyl), mtcars, groups = cyl, pch = 19, cex = 0.7,
   panel = function(x, y, ...) {
     panel.stripplot(x, y, jitter.data = TRUE, 
       horizontal = FALSE, amount = 0.15, ...)
-    panel.pvalue(x, y, std = 1, symbol = TRUE, pvalue = TRUE)
+    panel.pvalue(x, y, std = 1, symbol = TRUE,
+      pvalue = TRUE, offset = 6)
 })
 
 }
