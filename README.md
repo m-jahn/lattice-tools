@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2021-11-30
+2022-01-17
 
 <!-- badges start -->
 
@@ -327,7 +327,7 @@ xyplot(mpg ~ factor(gear), mtcars,
 # horizontal dumbbells
 xyplot(factor(gear) ~ mpg, mtcars,
   groups = gear,
-  pch = 19, lwd = 4, cex = 4,
+  pch = 19, lwd = 2,
   panel = function(x, y, ...) {
     panel.dumbbell(x, y, ...)
   }

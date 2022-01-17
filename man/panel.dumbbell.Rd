@@ -31,8 +31,8 @@ panel.dumbbell(
 
 \item{alpha, lty, lwd}{(numeric) graphical parameters}
 
-\item{direction}{(character) axis along which the dumbbell is drawn. Default (NULL) is to guess 
-the direction from the input variables}
+\item{direction}{(character) axis along which the dumbbell is drawn. Possible values that enforce a direction are
+"vertical" and "horizontal". Default (NULL) is to guess the direction from the input variables}
 
 \item{...}{other arguments passed to the function}
 }
@@ -59,7 +59,7 @@ xyplot(mpg ~ factor(gear), mtcars,
 # horizontal dumbbells
 xyplot(factor(gear) ~ mpg, mtcars,
   groups = gear,
-  pch = 19, lwd = 4, cex = 4,
+  pch = 19, lwd = 2,
   panel = function(x, y, ...) {
     panel.dumbbell(x, y, ...)
   }

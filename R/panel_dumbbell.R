@@ -12,8 +12,8 @@
 #' @param group.number (numeric) internal variable for grouping, does not need to be specified
 #' @param col_handle (character, numeric) color of the lollipop handle (defaults to superpose.symbol$col)
 #' @param alpha,lty,lwd (numeric) graphical parameters
-#' @param direction (character) axis along which the dumbbell is drawn. Default (NULL) is to guess 
-#'   the direction from the input variables
+#' @param direction (character) axis along which the dumbbell is drawn. Possible values that enforce a direction are
+#' "vertical" and "horizontal". Default (NULL) is to guess the direction from the input variables
 #' @param ... other arguments passed to the function
 #' @export
 #' 
@@ -33,7 +33,7 @@
 #' # horizontal dumbbells
 #' xyplot(factor(gear) ~ mpg, mtcars,
 #'   groups = gear,
-#'   pch = 19, lwd = 4, cex = 4,
+#'   pch = 19, lwd = 2,
 #'   panel = function(x, y, ...) {
 #'     panel.dumbbell(x, y, ...)
 #'   }
