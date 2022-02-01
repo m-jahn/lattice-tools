@@ -138,7 +138,7 @@ get_repelled_labels <- function(
     force_push = force_push,
     force_pull = force_pull,
     max_time = 3, 
-    max_overlaps = 10, 
+    max_overlaps = 30, 
     max_iter = 100000,
     direction = "both", 
     verbose = FALSE
