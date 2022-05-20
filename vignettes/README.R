@@ -508,8 +508,8 @@ custom_splom(mtcars[1:5])
 # We can customize the scatterplot
 custom_splom(
   mtcars[1:5],
-  col_palette = rainbow(4),
-  pscales = 10, 
+  col_palette = c("#9FA2FF", "#F1F1F1", "#BAAE00"),
+  pscales = 10,
   xlab = "data points", ylab = "regression",
   pch = 1, col = 1, cex = 0.6
 )

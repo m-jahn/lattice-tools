@@ -61,11 +61,11 @@ custom_splom <- function(df, ...,
     upper.panel = function(x, y, ...) {
       common <- which(!is.na(x*y))
       x = x[common]; y = y[common]
-      palette = grDevices::colorRampPalette(col_palette)(11)
-      panel.fill(col = palette[1+abs(round(stats::cor(x, y)*10))])
+      palette = grDevices::colorRampPalette(col_palette)(100)
+      panel.fill(col = palette[1+round((1+stats::cor(x, y))*49.5)])
       panel.lmline(x, y, fontfamily = "FreeSans")
       cpl <- current.panel.limits()
-      panel.text(mean(cpl$xlim), mean(cpl$ylim), round(cor(x, y), 2), font=2)
+      panel.text(mean(cpl$xlim), mean(cpl$ylim), round(cor(x, y), 2), font = 2)
     }, ...
   )
   

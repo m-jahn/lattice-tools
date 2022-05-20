@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2022-02-01
+2022-05-20
 
 <!-- badges start -->
 
@@ -840,7 +840,7 @@ xyplot(mpg ~ factor(carb) | gear, mtcars,
 
 ![](vignettes/README_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
-### custom\_splom
+### custom_splom
 
 Custom scatterplot matrix (SPLOM). A wrapper function around lattice
 ‘splom’ with different upper and lower panels. A scatterplot matrix is a
@@ -862,8 +862,8 @@ custom_splom(mtcars[1:5])
 # We can customize the scatterplot
 custom_splom(
   mtcars[1:5],
-  col_palette = rainbow(4),
-  pscales = 10, 
+  col_palette = c("#9FA2FF", "#F1F1F1", "#BAAE00"),
+  pscales = 10,
   xlab = "data points", ylab = "regression",
   pch = 1, col = 1, cex = 0.6
 )
