@@ -91,6 +91,18 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
   }
 )
 
+# if you supply a two column matrix as the error_margin argument,
+# error bars with different lower and upper bounds can be drawn
+error_mat <- matrix(ncol = 2, 1:6)
+xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = error_mat, twoway = TRUE, fill = NA,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.barplot(x, y, ...)
+  }
+)
+
 ## ---- fig.height = 3, fig.width = 5-------------------------------------------
 # simple example
 df <- data.frame(
@@ -226,6 +238,18 @@ mtcars_means <- data.frame(
 # range of the y variable only, ignoring the extension through error bars.
 xyplot(mpg ~ factor(cyl), mtcars_means,
   error_margin = mtcars_means$stdev,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+  }
+)
+
+# if you supply a two column matrix as the error_margin argument,
+# error bars with different lower and upper bounds can be drawn
+error_mat <- matrix(ncol = 2, 1:6)
+  xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = error_mat,
   ylim = c(9, 36), groups = cyl,
   lwd = 2, pch = 19, cex = 1.5,
   panel = function(x, y, ...) {

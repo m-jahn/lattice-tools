@@ -28,9 +28,10 @@ of unique x values.}
 
 \item{subscripts}{subscripts passed down from xyplot (does not need to be specified)}
 
-\item{error_margin}{optional vector of error margins if errors are not to be computed, 
-but supplied directly. Needs to be of length(y), default is NULL. If supplied,
-FUN_mean and FUN_errb are ignored.}
+\item{error_margin}{optional input for error margins if errors are not to be computed, 
+but supplied directly. Can be a vector of length(y), or a two-column matrix with
+first column representing lower and second column upper bounds for each point.
+Default is NULL. If supplied, FUN_errb is ignored.}
 
 \item{col}{(character) color (vector) to be used for points and lines. 
 The default, NULL, uses colors supplied by the top level function.}
@@ -105,4 +106,15 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
   }
 )
 
+# if you supply a two column matrix as the error_margin argument,
+# error bars with different lower and upper bounds can be drawn
+error_mat <- matrix(ncol = 2, 1:6)
+xyplot(mpg ~ factor(cyl), mtcars_means,
+ error_margin = error_mat,
+ ylim = c(9, 36), groups = cyl,
+ lwd = 2, pch = 19, cex = 1.5,
+ panel = function(x, y, ...) {
+   panel.errbars(x, y, ...)
+ }
+)
 }

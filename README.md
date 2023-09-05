@@ -1,7 +1,7 @@
 lattice-tools
 ================
 Michael Jahn,
-2022-05-20
+2023-09-05
 
 <!-- badges start -->
 
@@ -179,6 +179,22 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 ```
 
 ![](vignettes/README_files/figure-gfm/unnamed-chunk-5-4.png)<!-- -->
+
+``` r
+# if you supply a two column matrix as the error_margin argument,
+# error bars with different lower and upper bounds can be drawn
+error_mat <- matrix(ncol = 2, 1:6)
+xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = error_mat, twoway = TRUE, fill = NA,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.barplot(x, y, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-5-5.png)<!-- -->
 
 ### panel.beeswarm
 
@@ -409,6 +425,22 @@ xyplot(mpg ~ factor(cyl), mtcars_means,
 ```
 
 ![](vignettes/README_files/figure-gfm/unnamed-chunk-9-4.png)<!-- -->
+
+``` r
+# if you supply a two column matrix as the error_margin argument,
+# error bars with different lower and upper bounds can be drawn
+error_mat <- matrix(ncol = 2, 1:6)
+  xyplot(mpg ~ factor(cyl), mtcars_means,
+  error_margin = error_mat,
+  ylim = c(9, 36), groups = cyl,
+  lwd = 2, pch = 19, cex = 1.5,
+  panel = function(x, y, ...) {
+    panel.errbars(x, y, ...)
+  }
+)
+```
+
+![](vignettes/README_files/figure-gfm/unnamed-chunk-9-5.png)<!-- -->
 
 ### panel.geneplot
 
