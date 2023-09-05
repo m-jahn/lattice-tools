@@ -13,14 +13,16 @@
 #'   of unique x values.
 #' @param groups grouping variable passed down from xyplot (does not need to be specified)
 #' @param subscripts subscripts passed down from xyplot (does not need to be specified)
-#' @param error_margin optional vector of error margins if errors are not to be computed, 
-#'   but supplied directly. Needs to be of length(y), default is NULL. If supplied,
-#'   FUN_mean and FUN_errb are ignored.
+#' @param error_margin optional input for error margins if errors are not to be computed, 
+#'   but supplied directly. Can be a vector of length(y), or a two-column matrix with
+#'   first column representing lower and second column upper bounds for each point.
+#'   Default is NULL. If supplied, FUN_errb is ignored.
 #' @param col (character) color (vector) to be used for points and lines. 
 #'   The default, NULL, uses colors supplied by the top level function.
 #' @param ewidth (numeric) width of the error bars and whiskers
 #' @param fill (numeric, character) optionally specify custom fill for the bars (default NULL, takes colors from col)
 #' @param fill_alpha (numeric) scalar setting the transparency of the bars (default: 0.5)
+#' @param twoway (logical) draw both upper and lower boundaries (default: FALSE)
 #' @param beside (logical) draw bars/points next to each other (default: FALSE)
 #' @param draw_points (logical) overlay original points over barplot (default: FALSE)
 #' @param origin (numeric) Y coordinate where bars should originate (default NULL means bottom axis)
@@ -80,13 +82,24 @@
 #'   }
 #' )
 #' 
+#' # if you supply a two column matrix as the error_margin argument,
+#' # error bars with different lower and upper bounds can be drawn
+#' error_mat <- matrix(ncol = 2, 1:6)
+#' xyplot(mpg ~ factor(cyl), mtcars_means,
+#'  error_margin = error_mat, twoway = TRUE, fill = NA,
+#'  ylim = c(9, 36), groups = cyl,
+#'  lwd = 2, pch = 19, cex = 1.5,
+#'  panel = function(x, y, ...) {
+#'    panel.barplot(x, y, ...)
+#'  }
+#' )
 #' @export
 # ------------------------------------------------------------------------------
 panel.barplot <- function (x, y,
   groups = NULL, subscripts = NULL,
   error_margin = NULL,
   col = NULL, ewidth = NULL, fill = NULL,
-  fill_alpha = 0.5,
+  fill_alpha = 0.5, twoway = FALSE,
   beside = FALSE, draw_points = FALSE,
   origin = NULL,
   FUN_mean = function(x) mean(x, na.rm = TRUE),
@@ -147,17 +160,24 @@ panel.barplot <- function (x, y,
     
     x_sub <- x[subg %in% val]
     y_sub <- y[subg %in% val]
+    means <- tapply(y_sub, x_sub, FUN_mean)
     
     if (is.null(error_margin)) {
       # aggregate values per group
-      means <- tapply(y_sub, x_sub, FUN_mean)
       stdev <- tapply(y_sub, x_sub, FUN_errb)
+      lower <- stdev; upper <- stdev
     } else {
-      # if error margins are supplied directly, use tapply
-      # simply to emulate same behavior as standard
-      error_margin <- error_margin[subscripts]
-      means <- tapply(y_sub, x_sub, mean)
-      stdev <- tapply(error_margin[subg %in% val], x_sub, mean)
+      # if error margins are supplied directly,
+      # differentiate between vector or matrix
+      if (!is.matrix(error_margin)) {
+        error_margin <- error_margin[subscripts]
+        stdev <- tapply(error_margin[subg %in% val], x_sub, mean)
+        lower <- stdev; upper <- stdev
+      } else {
+        error_margin <- error_margin[subscripts, ]
+        lower <- tapply(error_margin[subg %in% val, 1], x_sub, mean)
+        upper <- tapply(error_margin[subg %in% val, 2], x_sub, mean)
+      }
     }
     
     x_s <- unique(x_sub)
@@ -166,7 +186,7 @@ panel.barplot <- function (x, y,
     if (is.null(origin)) ybottom <- current.panel.limits()$ylim[1]
     else ybottom <- origin
     
-    Y <- as.matrix(cbind(means, means-stdev, means+stdev))
+    Y <- as.matrix(cbind(means, means-lower, means+upper))
     y_s <- Y[x_s, 1]
     y0 <- Y[x_s, 2]
     y1 <- Y[x_s, 3]
@@ -177,6 +197,12 @@ panel.barplot <- function (x, y,
       col = col[val], ...)
     panel.segments(x0 = x_pos - offs, x1 = x_pos + offs, y0 = y1, y1 = y1, 
       col = col[val], ...)
+    if (twoway) {
+      panel.segments(x0 = x_pos, x1 = x_pos, y0 = y0, y1 = y_s, 
+        col = col[val], ...)
+      panel.segments(x0 = x_pos - offs, x1 = x_pos + offs, y0 = y0, y1 = y0, 
+        col = col[val], ...)
+    }
     panel.rect(xleft = x_pos - ewidth, ybottom = ybottom, xright = x_pos + ewidth, 
       ytop = y_s, col = col[val], fill = fill, fill_alpha = fill_alpha, ...)
     

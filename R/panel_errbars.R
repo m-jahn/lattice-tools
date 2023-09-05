@@ -13,9 +13,10 @@
 #'   of unique x values.
 #' @param groups grouping variable passed down from xyplot (does not need to be specified)
 #' @param subscripts subscripts passed down from xyplot (does not need to be specified)
-#' @param error_margin optional vector of error margins if errors are not to be computed, 
-#'   but supplied directly. Needs to be of length(y), default is NULL. If supplied,
-#'   FUN_mean and FUN_errb are ignored.
+#' @param error_margin optional input for error margins if errors are not to be computed, 
+#'   but supplied directly. Can be a vector of length(y), or a two-column matrix with
+#'   first column representing lower and second column upper bounds for each point.
+#'   Default is NULL. If supplied, FUN_errb is ignored.
 #' @param col (character) color (vector) to be used for points and lines. 
 #'   The default, NULL, uses colors supplied by the top level function.
 #' @param ewidth width of the error bar whiskers
@@ -76,6 +77,17 @@
 #'   }
 #' )
 #' 
+#' # if you supply a two column matrix as the error_margin argument,
+#' # error bars with different lower and upper bounds can be drawn
+#' error_mat <- matrix(ncol = 2, 1:6)
+#' xyplot(mpg ~ factor(cyl), mtcars_means,
+#'  error_margin = error_mat,
+#'  ylim = c(9, 36), groups = cyl,
+#'  lwd = 2, pch = 19, cex = 1.5,
+#'  panel = function(x, y, ...) {
+#'    panel.errbars(x, y, ...)
+#'  }
+#' )
 #' @export
 # ------------------------------------------------------------------------------
 panel.errbars <- function (x, y,
@@ -113,24 +125,31 @@ panel.errbars <- function (x, y,
     
     x_sub <- x[subg %in% val]
     y_sub <- y[subg %in% val]
+    means <- tapply(y_sub, x_sub, FUN_mean)
     
     if (is.null(error_margin)) {
       # aggregate values per group
-      means <- tapply(y_sub, x_sub, FUN_mean)
       stdev <- tapply(y_sub, x_sub, FUN_errb)
+      lower <- stdev; upper <- stdev
     } else {
-      # if error margins are supplied directly, use tapply
-      # simply to emulate same behavior as standard
-      error_margin <- error_margin[subscripts]
-      means <- tapply(y_sub, x_sub, mean)
-      stdev <- tapply(error_margin[subg %in% val], x_sub, mean)
+      # if error margins are supplied directly,
+      # differentiate between vector or matrix
+      if (!is.matrix(error_margin)) {
+        error_margin <- error_margin[subscripts]
+        stdev <- tapply(error_margin[subg %in% val], x_sub, mean)
+        lower <- stdev; upper <- stdev
+      } else {
+        error_margin <- error_margin[subscripts, ]
+        lower <- tapply(error_margin[subg %in% val, 1], x_sub, mean)
+        upper <- tapply(error_margin[subg %in% val, 2], x_sub, mean)
+      }
     }
     
     x_s <- unique(x_sub)
     if (is.factor(x_s)) x_s <- sort(as.numeric(x_s))
     if (beside) x_pos <- x_s + nudge[val] else x_pos <- x_s
     
-    Y <- as.matrix(cbind(means, means-stdev, means+stdev))
+    Y <- as.matrix(cbind(means, means-lower, means+upper))
     y_s <- Y[x_s, 1]
     y0 <- Y[x_s, 2]
     y1 <- Y[x_s, 3]
