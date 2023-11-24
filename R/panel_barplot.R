@@ -181,8 +181,13 @@ panel.barplot <- function (x, y,
     }
     
     x_s <- unique(x_sub)
-    if (is.factor(x_s)) x_s <- sort(as.numeric(x_s))
-    if (beside) x_pos <- x_s + nudge[val] else x_pos <- x_s
+    if (is.factor(x_s)) {
+      x_s <- sort(as.numeric(x_s))
+      if (beside) x_pos <- x_s + nudge[val] else x_pos <- x_s
+    } else {
+      if (beside) x_pos <- x_s + nudge[val] else x_pos <- x_s
+      x_s <- order(x_s)
+    }
     if (is.null(origin)) ybottom <- current.panel.limits()$ylim[1]
     else ybottom <- origin
     
